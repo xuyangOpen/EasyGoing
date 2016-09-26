@@ -1,0 +1,24 @@
+# Uncomment this line to define a global platform for your project
+#  platform :ios, '8.0'
+# Uncomment this line if you're using Swift
+use_frameworks!
+
+target 'EasyGoing' do
+
+pod 'SnapKit'
+pod 'MBProgressHUD'
+pod 'AFNetworking'
+pod 'SwiftyJSON'
+pod 'CryptoSwift'
+pod 'FMDB'
+pod 'YYModel'
+pod 'MJRefresh'
+pod 'SDWebImage'
+pod 'AVOSCloud'
+pod 'pop'
+pod 'IQKeyboardManager'
+pod 'BlocksKit'
+pod 'SDAutoLayout'
+
+end
+

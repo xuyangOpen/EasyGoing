@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  EasyGoing
+
+  Created by King on 16/9/21.
+  Copyright © 2016年 kf. All rights reserved.
+  格式：类名 + 功能 + 标记
+  添加国际化文本时，记得加逗号
+*/
+
+    "Calendar" = "日历";
+    "Unknown network" = "未知网络";
+    "Not Available Network" = "网络不可用，请检查网络连接";
+
+    "TimeLine.add.title" = "添加消费记录";
+    "TimeLine.navigation.back" = "返回";
+
+    "AddRecordViewController.label.time" = "日期";
+    "AddRecordViewController.label.event" = "消费项目";
+    "AddRecordViewController.label.cost" = "消费金额";
+    "AddRecordViewController.label.mark" = "备注";
+    "AddRecordViewController.submit.text" = "提交";
+    "AddRecordViewController.placehold.cost" = "最多保留两位小数";
+    "AddRecordViewController.error.time" = "请选择时间";
+    "AddRecordViewController.error.event" = "请填写消费项目";
+    "AddRecordViewController.error.cost" = "请填写消费金额";
+    "AddRecordViewController.save.success" = "保存成功";
+    "AddRecordViewController.save.loading" = "保存中";
+
+
+
+
+
+
+
+
+
+
+
