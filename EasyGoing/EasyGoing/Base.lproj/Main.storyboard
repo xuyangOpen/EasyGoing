@@ -61,15 +61,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NBH-5I-vbe">
-                                <rect key="frame" x="30" y="172" width="315" height="40"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="5XB-bN-d8c"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="消费金额" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hzu-DM-4Pc">
                                 <rect key="frame" x="30" y="222" width="68" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -113,28 +104,41 @@
                                     <action selector="submitAction:" destination="Zre-dh-eGC" eventType="touchUpInside" id="poI-3f-51S"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xK-io-VbT">
+                                <rect key="frame" x="30" y="172" width="315" height="40"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Qmc-wZ-vbn"/>
+                                </constraints>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="0.13725490200000001" green="0.73333333329999995" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="chooseEventAction:" destination="Zre-dh-eGC" eventType="touchUpInside" id="1jG-k8-4DI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="NBH-5I-vbe" firstAttribute="top" secondItem="Zx2-99-RRX" secondAttribute="bottom" constant="5" id="7Im-pi-Hhe"/>
                             <constraint firstItem="Xmt-7x-LIs" firstAttribute="top" secondItem="5EE-lY-wGf" secondAttribute="bottom" constant="50" id="8RA-gf-iMW"/>
                             <constraint firstItem="2bh-3k-jzM" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="93T-uc-Ui7"/>
+                            <constraint firstItem="6xK-io-VbT" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="B1i-t2-7NX"/>
                             <constraint firstItem="Xmt-7x-LIs" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="BEf-MG-6R5"/>
                             <constraint firstAttribute="trailing" secondItem="CKh-2d-MsP" secondAttribute="trailing" constant="30" id="Ltl-BJ-2h5"/>
                             <constraint firstAttribute="trailing" secondItem="eQ5-SZ-fJC" secondAttribute="trailing" constant="30" id="ML4-1w-FjB"/>
                             <constraint firstItem="eQ5-SZ-fJC" firstAttribute="top" secondItem="Xmt-7x-LIs" secondAttribute="bottom" constant="5" id="QP9-dm-Wzj"/>
                             <constraint firstItem="Zx2-99-RRX" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="SbK-Tj-C1H"/>
                             <constraint firstItem="ssW-l3-7j0" firstAttribute="top" secondItem="qgj-LY-vSz" secondAttribute="bottom" constant="5" id="YKd-88-WBH"/>
+                            <constraint firstAttribute="trailing" secondItem="6xK-io-VbT" secondAttribute="trailing" constant="30" id="b2I-SL-PL9"/>
                             <constraint firstItem="Zx2-99-RRX" firstAttribute="top" secondItem="eQ5-SZ-fJC" secondAttribute="bottom" constant="10" id="eEE-Sh-CUf"/>
+                            <constraint firstItem="6xK-io-VbT" firstAttribute="top" secondItem="Zx2-99-RRX" secondAttribute="bottom" constant="5" id="f60-kH-4Sv"/>
                             <constraint firstItem="qgj-LY-vSz" firstAttribute="top" secondItem="CKh-2d-MsP" secondAttribute="bottom" constant="10" id="gRG-W0-gJI"/>
                             <constraint firstAttribute="trailing" secondItem="ssW-l3-7j0" secondAttribute="trailing" constant="30" id="hNh-vf-pnz"/>
-                            <constraint firstItem="NBH-5I-vbe" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="hgi-PQ-MLT"/>
                             <constraint firstItem="ssW-l3-7j0" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="isS-ia-Xj2"/>
-                            <constraint firstItem="hzu-DM-4Pc" firstAttribute="top" secondItem="NBH-5I-vbe" secondAttribute="bottom" constant="10" id="ivy-TW-geP"/>
-                            <constraint firstAttribute="trailing" secondItem="NBH-5I-vbe" secondAttribute="trailing" constant="30" id="m2h-pE-gVu"/>
                             <constraint firstItem="2bh-3k-jzM" firstAttribute="top" secondItem="ssW-l3-7j0" secondAttribute="bottom" constant="30" id="nmO-Gm-ldJ"/>
                             <constraint firstItem="qgj-LY-vSz" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="p6d-Wd-1UF"/>
                             <constraint firstItem="CKh-2d-MsP" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="pWT-NQ-JJo"/>
+                            <constraint firstItem="hzu-DM-4Pc" firstAttribute="top" secondItem="6xK-io-VbT" secondAttribute="bottom" constant="10" id="qyx-BT-yOd"/>
                             <constraint firstItem="hzu-DM-4Pc" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="riI-a9-UD9"/>
                             <constraint firstAttribute="trailing" secondItem="2bh-3k-jzM" secondAttribute="trailing" constant="30" id="xQc-yi-ZSv"/>
                             <constraint firstItem="eQ5-SZ-fJC" firstAttribute="leading" secondItem="rc4-IL-6tx" secondAttribute="leading" constant="30" id="zRk-X7-auL"/>
@@ -145,8 +149,8 @@
                     <connections>
                         <outlet property="costLabel" destination="hzu-DM-4Pc" id="QJD-xM-a7u"/>
                         <outlet property="costTextField" destination="CKh-2d-MsP" id="ORe-G0-eA9"/>
+                        <outlet property="eventButton" destination="6xK-io-VbT" id="vgj-FV-BFx"/>
                         <outlet property="eventLabel" destination="Zx2-99-RRX" id="pIh-oo-B8F"/>
-                        <outlet property="eventTextField" destination="NBH-5I-vbe" id="lFL-jx-iRI"/>
                         <outlet property="markLabel" destination="qgj-LY-vSz" id="bzO-Lt-iow"/>
                         <outlet property="markTextView" destination="ssW-l3-7j0" id="R2z-62-bd4"/>
                         <outlet property="submitButton" destination="2bh-3k-jzM" id="YG6-tU-glf"/>

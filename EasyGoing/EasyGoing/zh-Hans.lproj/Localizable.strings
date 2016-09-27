@@ -19,11 +19,13 @@
     "AddRecordViewController.label.event" = "消费项目";
     "AddRecordViewController.label.cost" = "消费金额";
     "AddRecordViewController.label.mark" = "备注";
+    "AddRecordViewController.label.select" = "选择消费项目";
     "AddRecordViewController.submit.text" = "提交";
     "AddRecordViewController.placehold.cost" = "最多保留两位小数";
     "AddRecordViewController.error.time" = "请选择时间";
-    "AddRecordViewController.error.event" = "请填写消费项目";
+    "AddRecordViewController.error.event" = "请选择消费项目";
     "AddRecordViewController.error.cost" = "请填写消费金额";
+
     "AddRecordViewController.save.success" = "保存成功";
     "AddRecordViewController.save.loading" = "保存中";
 

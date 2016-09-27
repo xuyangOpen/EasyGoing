@@ -135,4 +135,16 @@ class Utils: NSObject{
             return (false,str)
         }
     }
+    
+    /**
+        计算文本的高度
+     */
+    class func heightForText(text:NSString,size:CGSize,font:UIFont) ->CGFloat{
+        let textSize = text.boundingRectWithSize(size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:font], context: nil).size
+        return textSize.height
+    }
+    
+    //MARK:TimeLine
+    /**消费项目类别的数据源*/
+    static var eventDataSource:[TimeLineEvent]?
 }

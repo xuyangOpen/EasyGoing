@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		07CE5BBF7D0CC88D63192558 /* Pods_EasyGoing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335A5E71DBC98B773D63F1AD /* Pods_EasyGoing.framework */; };
+		3F105F391D9A09B20025F7B7 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F105F381D9A09B20025F7B7 /* close.png */; };
+		3F105F3B1D9A10C80025F7B7 /* TimeLineEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F105F3A1D9A10C80025F7B7 /* TimeLineEvent.swift */; };
+		3F105F3D1D9A11D50025F7B7 /* TimeLineChooseEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */; };
+		3F105F3F1D9A6C3D0025F7B7 /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F105F3E1D9A6C3D0025F7B7 /* mark.png */; };
 		3F11DA8E1D93E32A00BD7465 /* CustomDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F11DA871D93E32A00BD7465 /* CustomDrawingView.m */; };
 		3F11DA8F1D93E32A00BD7465 /* DrawRectObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F11DA891D93E32A00BD7465 /* DrawRectObject.m */; };
 		3F11DA901D93E32A00BD7465 /* DrawingStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F11DA8B1D93E32A00BD7465 /* DrawingStyle.m */; };
@@ -133,6 +137,10 @@
 /* Begin PBXFileReference section */
 		07AEE4AE912EB589791A7636 /* Pods-EasyGoing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyGoing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyGoing/Pods-EasyGoing.debug.xcconfig"; sourceTree = "<group>"; };
 		335A5E71DBC98B773D63F1AD /* Pods_EasyGoing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyGoing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F105F381D9A09B20025F7B7 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		3F105F3A1D9A10C80025F7B7 /* TimeLineEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineEvent.swift; sourceTree = "<group>"; };
+		3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineChooseEventController.swift; sourceTree = "<group>"; };
+		3F105F3E1D9A6C3D0025F7B7 /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		3F11DA861D93E32A00BD7465 /* CustomDrawingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDrawingView.h; sourceTree = "<group>"; };
 		3F11DA871D93E32A00BD7465 /* CustomDrawingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDrawingView.m; sourceTree = "<group>"; };
 		3F11DA881D93E32A00BD7465 /* DrawRectObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawRectObject.h; sourceTree = "<group>"; };
@@ -347,6 +355,7 @@
 				3F8394121D94CA080076CE99 /* PopShowViewController.swift */,
 				3F83940D1D94C0020076CE99 /* TimeLineCalendarCell.swift */,
 				3F83941A1D9529D20076CE99 /* TimeLineNormalCell.swift */,
+				3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */,
 			);
 			name = TimeLine;
 			sourceTree = "<group>";
@@ -356,6 +365,7 @@
 			children = (
 				3FCCC8391D926DF2009CD14A /* WaterFlowModel.swift */,
 				3F8394171D951F330076CE99 /* TimeLineRecord.swift */,
+				3F105F3A1D9A10C80025F7B7 /* TimeLineEvent.swift */,
 			);
 			name = TimeLine;
 			sourceTree = "<group>";
@@ -656,6 +666,8 @@
 		3FCCC83B1D9278A7009CD14A /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3F105F3E1D9A6C3D0025F7B7 /* mark.png */,
+				3F105F381D9A09B20025F7B7 /* close.png */,
 				3FCCC8421D928AA2009CD14A /* show1.jpg */,
 				3FCCC83E1D9278E3009CD14A /* show2.jpg */,
 				3FCCC8441D928AAB009CD14A /* show3.jpg */,
@@ -863,6 +875,7 @@
 				3FB69F811D73CFF500859883 /* classlist_bar_unselected@3x.png in Resources */,
 				3FB69F891D73CFF500859883 /* class_bar_unselected.png in Resources */,
 				3FB69FA11D740DC000859883 /* qqzone@2x.png in Resources */,
+				3F105F391D9A09B20025F7B7 /* close.png in Resources */,
 				3FB69F881D73CFF500859883 /* class_bar_unselected@2x.png in Resources */,
 				3FB69F281D73CA2B00859883 /* LaunchScreen.storyboard in Resources */,
 				3FB69F6F1D73CFF500859883 /* classlist_bar_selected@3x.png in Resources */,
@@ -895,6 +908,7 @@
 				3FB69FB91D742B1400859883 /* next@3x.png in Resources */,
 				3FB69F741D73CFF500859883 /* teacher_bar_selected.png in Resources */,
 				3FCF955B1D7520FB004166E5 /* bt_previous@2x.png in Resources */,
+				3F105F3F1D9A6C3D0025F7B7 /* mark.png in Resources */,
 				3FB69F751D73CFF500859883 /* me_bar_unselected@3x.png in Resources */,
 				3FB69FA51D740DD100859883 /* weibo@2x.png in Resources */,
 				3FCF955A1D7520FB004166E5 /* bt_next@2x.png in Resources */,
@@ -1005,6 +1019,7 @@
 				3F8394151D94D33F0076CE99 /* AddRecordViewController.swift in Sources */,
 				3FB69F8B1D73D0D400859883 /* HomeTabBarController.swift in Sources */,
 				3FCF955F1D752116004166E5 /* UIColor+ZXLazy.m in Sources */,
+				3F105F3D1D9A11D50025F7B7 /* TimeLineChooseEventController.swift in Sources */,
 				3FCCC85A1D928F14009CD14A /* GCDGroup.m in Sources */,
 				3FCCC8411D928A86009CD14A /* UIImage+Extension.swift in Sources */,
 				3FCCC83A1D926DF2009CD14A /* WaterFlowModel.swift in Sources */,
@@ -1021,6 +1036,7 @@
 				3FCCC84C1D928DF7009CD14A /* CAGradientMaskView.m in Sources */,
 				3FCCC8361D9254BA009CD14A /* WaterFlowCell.swift in Sources */,
 				3F11DA981D93E37A00BD7465 /* DefaultNotificationCenter.m in Sources */,
+				3F105F3B1D9A10C80025F7B7 /* TimeLineEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

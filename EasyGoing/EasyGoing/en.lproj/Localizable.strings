@@ -19,10 +19,11 @@
     "AddRecordViewController.label.event" = "Event";
     "AddRecordViewController.label.cost" = "Amount of consumption";
     "AddRecordViewController.label.mark" = "Remark";
+    "AddRecordViewController.label.select" = "Select a consumption item";
     "AddRecordViewController.submit.text" = "Submit";
     "AddRecordViewController.placehold.cost" = "Up to two decimal places";
     "AddRecordViewController.error.time" = "Please select the time";
-    "AddRecordViewController.error.event" = "Please fill consumer items";
+    "AddRecordViewController.error.event" = "Please select payment items";
     "AddRecordViewController.error.cost" = "Please fill in the amount of consumption";
     "AddRecordViewController.save.success" = "Saved successfully";
     "AddRecordViewController.save.loading" = "Saving";
