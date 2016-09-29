@@ -43,6 +43,8 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
         if self.dataSource == nil {
             //查询数据
             let query = AVQuery.init(className: "TimeLineEvent")
+            //降序排列，把最新的显示在最前面
+            query.orderByDescending("updatedAt")
             //查询userId为空的数据
             query.whereKey("userId", equalTo: "")
             query.findObjectsInBackgroundWithBlock({ (objs, error) in
@@ -54,6 +56,8 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
                             let model = TimeLineEvent()
                             model.objectId = obj.objectForKey("objectId") as! String
                             model.eventName = obj.objectForKey("eventName") as! String
+                            let date = obj.objectForKey("updatedAt") as! NSDate
+                            model.updatedAt = String(date.timeIntervalSince1970 * 1000)
                             //查询父目录id
                             if obj.objectForKey("parentId") != nil{
                                 let parentObject = obj.objectForKey("parentId") as! AVObject
@@ -121,6 +125,9 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
                         childArray.append(allModel)
                     }
                 }
+                childArray.sortInPlace({ (obj1, obj2) -> Bool in
+                    return obj1.updatedAt > obj2.updatedAt
+                })
                 //设置子目录的字典
                 self.childEvent.setValue(childArray, forKey: parentModel.objectId)
             }

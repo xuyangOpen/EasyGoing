@@ -9,14 +9,34 @@
 import UIKit
 
 class TimeLineEvent: NSObject {
-
+    
     var objectId = ""                   //主键
     var parentId = ""                   //父目录主键
     var eventName = ""                  //项目名称
     var parentName = ""                 //父目录名称
     var userId = ""                     //用户id
     
-    /**  
+    var updatedAt = ""                  //更新时间
+    
+    //通过AVObject初始化TimeLineEvent类
+    class func initEventWithAVObject(avObject:AVObject) -> TimeLineEvent{
+        let model = TimeLineEvent()
+        model.eventName = avObject.objectForKey("eventName") as! String
+        let date = avObject.objectForKey("updatedAt") as! NSDate
+        model.updatedAt = String(date.timeIntervalSince1970 * 1000)
+        model.objectId = avObject.objectForKey("objectId") as! String
+        if avObject.objectForKey("userId") != nil{
+            model.userId = avObject.objectForKey("userId") as! String
+        }
+        //查询父目录id
+        if avObject.objectForKey("parentId") != nil{
+            let parentObject = avObject.objectForKey("parentId") as! AVObject
+            model.parentId = parentObject.objectForKey("objectId") as! String
+        }
+        return model
+    }
+    
+    /**
      let obj = AVObject.init(className: "TimeLineEvent")
      obj.setObject("投资", forKey: "eventName")
      obj.setObject("", forKey: "userId")

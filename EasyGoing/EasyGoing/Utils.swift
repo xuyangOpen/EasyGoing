@@ -23,6 +23,9 @@ class Utils: NSObject{
         hud.mode = .Indeterminate
     }
     
+    
+    
+    
     static let screenWidth = UIScreen.mainScreen().bounds.width;
     static let screenHeight = UIScreen.mainScreen().bounds.height;
     static let bgColor = UIColor.init(red: 237.0/255.0, green: 237.0/255.0, blue: 237.0/255.0, alpha: 1.0);

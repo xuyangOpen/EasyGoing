@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		07CE5BBF7D0CC88D63192558 /* Pods_EasyGoing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335A5E71DBC98B773D63F1AD /* Pods_EasyGoing.framework */; };
+		3F0B11B91D9B4C93008A6EBD /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11B81D9B4C93008A6EBD /* plus.png */; };
+		3F0B11C01D9B543B008A6EBD /* data.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11BD1D9B543B008A6EBD /* data.png */; };
+		3F0B11C11D9B543B008A6EBD /* eventPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11BE1D9B543B008A6EBD /* eventPlus.png */; };
+		3F0B11C21D9B543B008A6EBD /* recordPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11BF1D9B543B008A6EBD /* recordPlus.png */; };
+		3F0B11C41D9B559F008A6EBD /* TimeLineAddEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B11C31D9B559F008A6EBD /* TimeLineAddEventController.swift */; };
+		3F0B11C61D9B6515008A6EBD /* minus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11C51D9B6515008A6EBD /* minus.png */; };
+		3F0B11C81D9B6725008A6EBD /* menuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F0B11C71D9B6725008A6EBD /* menuIcon.png */; };
+		3F0B11CC1D9B8CF9008A6EBD /* TimeLineEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B11CB1D9B8CF9008A6EBD /* TimeLineEventCell.swift */; };
 		3F105F391D9A09B20025F7B7 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F105F381D9A09B20025F7B7 /* close.png */; };
 		3F105F3B1D9A10C80025F7B7 /* TimeLineEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F105F3A1D9A10C80025F7B7 /* TimeLineEvent.swift */; };
 		3F105F3D1D9A11D50025F7B7 /* TimeLineChooseEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */; };
@@ -27,6 +35,7 @@
 		3F8394151D94D33F0076CE99 /* AddRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8394141D94D33F0076CE99 /* AddRecordViewController.swift */; };
 		3F8394181D951F330076CE99 /* TimeLineRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8394171D951F330076CE99 /* TimeLineRecord.swift */; };
 		3F83941B1D9529D20076CE99 /* TimeLineNormalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F83941A1D9529D20076CE99 /* TimeLineNormalCell.swift */; };
+		3F8CCE691D9BC8210042483C /* TimeLineEventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8CCE681D9BC8210042483C /* TimeLineEventTableView.swift */; };
 		3F9FE0ED1D9374170077198C /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9FE0EC1D9374170077198C /* CircleView.m */; };
 		3F9FE0F21D93744D0077198C /* easing.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F9FE0EE1D93744D0077198C /* easing.c */; };
 		3F9FE0F31D93744D0077198C /* YXEasing.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9FE0F11D93744D0077198C /* YXEasing.m */; };
@@ -137,6 +146,14 @@
 /* Begin PBXFileReference section */
 		07AEE4AE912EB589791A7636 /* Pods-EasyGoing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyGoing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyGoing/Pods-EasyGoing.debug.xcconfig"; sourceTree = "<group>"; };
 		335A5E71DBC98B773D63F1AD /* Pods_EasyGoing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyGoing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F0B11B81D9B4C93008A6EBD /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		3F0B11BD1D9B543B008A6EBD /* data.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = data.png; sourceTree = "<group>"; };
+		3F0B11BE1D9B543B008A6EBD /* eventPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eventPlus.png; sourceTree = "<group>"; };
+		3F0B11BF1D9B543B008A6EBD /* recordPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recordPlus.png; sourceTree = "<group>"; };
+		3F0B11C31D9B559F008A6EBD /* TimeLineAddEventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineAddEventController.swift; sourceTree = "<group>"; };
+		3F0B11C51D9B6515008A6EBD /* minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minus.png; sourceTree = "<group>"; };
+		3F0B11C71D9B6725008A6EBD /* menuIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuIcon.png; sourceTree = "<group>"; };
+		3F0B11CB1D9B8CF9008A6EBD /* TimeLineEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineEventCell.swift; sourceTree = "<group>"; };
 		3F105F381D9A09B20025F7B7 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		3F105F3A1D9A10C80025F7B7 /* TimeLineEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineEvent.swift; sourceTree = "<group>"; };
 		3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineChooseEventController.swift; sourceTree = "<group>"; };
@@ -166,6 +183,7 @@
 		3F8394141D94D33F0076CE99 /* AddRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecordViewController.swift; sourceTree = "<group>"; };
 		3F8394171D951F330076CE99 /* TimeLineRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineRecord.swift; sourceTree = "<group>"; };
 		3F83941A1D9529D20076CE99 /* TimeLineNormalCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineNormalCell.swift; sourceTree = "<group>"; };
+		3F8CCE681D9BC8210042483C /* TimeLineEventTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineEventTableView.swift; sourceTree = "<group>"; };
 		3F9FE0EB1D9374170077198C /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
 		3F9FE0EC1D9374170077198C /* CircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleView.m; sourceTree = "<group>"; };
 		3F9FE0EE1D93744D0077198C /* easing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = easing.c; sourceTree = "<group>"; };
@@ -316,6 +334,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F0B11BA1D9B532C008A6EBD /* PopShow */ = {
+			isa = PBXGroup;
+			children = (
+				3F0B11BD1D9B543B008A6EBD /* data.png */,
+				3F0B11BE1D9B543B008A6EBD /* eventPlus.png */,
+				3F0B11BF1D9B543B008A6EBD /* recordPlus.png */,
+			);
+			name = PopShow;
+			sourceTree = "<group>";
+		};
 		3F11DA851D93E30B00BD7465 /* WaterWave */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +384,9 @@
 				3F83940D1D94C0020076CE99 /* TimeLineCalendarCell.swift */,
 				3F83941A1D9529D20076CE99 /* TimeLineNormalCell.swift */,
 				3F105F3C1D9A11D50025F7B7 /* TimeLineChooseEventController.swift */,
+				3F0B11C31D9B559F008A6EBD /* TimeLineAddEventController.swift */,
+				3F0B11CB1D9B8CF9008A6EBD /* TimeLineEventCell.swift */,
+				3F8CCE681D9BC8210042483C /* TimeLineEventTableView.swift */,
 			);
 			name = TimeLine;
 			sourceTree = "<group>";
@@ -666,6 +697,10 @@
 		3FCCC83B1D9278A7009CD14A /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3F0B11BA1D9B532C008A6EBD /* PopShow */,
+				3F0B11B81D9B4C93008A6EBD /* plus.png */,
+				3F0B11C51D9B6515008A6EBD /* minus.png */,
+				3F0B11C71D9B6725008A6EBD /* menuIcon.png */,
 				3F105F3E1D9A6C3D0025F7B7 /* mark.png */,
 				3F105F381D9A09B20025F7B7 /* close.png */,
 				3FCCC8421D928AA2009CD14A /* show1.jpg */,
@@ -872,11 +907,14 @@
 				3F9FE1011D93AB1A0077198C /* snow@2x.png in Resources */,
 				3FB69F721D73CFF500859883 /* teacher_bar_selected@3x.png in Resources */,
 				3FCCC82E1D9223B3009CD14A /* Localizable.strings in Resources */,
+				3F0B11C21D9B543B008A6EBD /* recordPlus.png in Resources */,
 				3FB69F811D73CFF500859883 /* classlist_bar_unselected@3x.png in Resources */,
+				3F0B11C11D9B543B008A6EBD /* eventPlus.png in Resources */,
 				3FB69F891D73CFF500859883 /* class_bar_unselected.png in Resources */,
 				3FB69FA11D740DC000859883 /* qqzone@2x.png in Resources */,
 				3F105F391D9A09B20025F7B7 /* close.png in Resources */,
 				3FB69F881D73CFF500859883 /* class_bar_unselected@2x.png in Resources */,
+				3F0B11B91D9B4C93008A6EBD /* plus.png in Resources */,
 				3FB69F281D73CA2B00859883 /* LaunchScreen.storyboard in Resources */,
 				3FB69F6F1D73CFF500859883 /* classlist_bar_selected@3x.png in Resources */,
 				3FB69FBE1D742B1E00859883 /* prev@2x.png in Resources */,
@@ -888,6 +926,7 @@
 				3FCCC83F1D9278E3009CD14A /* show2.jpg in Resources */,
 				3FB69F231D73CA2B00859883 /* Main.storyboard in Resources */,
 				3FB69F791D73CFF500859883 /* class_bar_selected@2x.png in Resources */,
+				3F0B11C01D9B543B008A6EBD /* data.png in Resources */,
 				3FB69F7E1D73CFF500859883 /* me_bar_selected@3x.png in Resources */,
 				3FB69F801D73CFF500859883 /* me_bar_selected.png in Resources */,
 				3FB69FBD1D742B1E00859883 /* prev.png in Resources */,
@@ -897,9 +936,11 @@
 				3FB69F871D73CFF500859883 /* class_bar_unselected@3x.png in Resources */,
 				3FB69F841D73CFF500859883 /* teacher_bar_unselected@3x.png in Resources */,
 				3FB69FBF1D742B1E00859883 /* prev@3x.png in Resources */,
+				3F0B11C61D9B6515008A6EBD /* minus.png in Resources */,
 				3FB69F761D73CFF500859883 /* me_bar_unselected@2x.png in Resources */,
 				3FB69F9E1D740DA700859883 /* center_exit@2x.png in Resources */,
 				3FB69F821D73CFF500859883 /* classlist_bar_unselected@2x.png in Resources */,
+				3F0B11C81D9B6725008A6EBD /* menuIcon.png in Resources */,
 				3FB69F781D73CFF500859883 /* class_bar_selected@3x.png in Resources */,
 				3FB69F851D73CFF500859883 /* teacher_bar_unselected@2x.png in Resources */,
 				3FB69FB81D742B1400859883 /* next@2x.png in Resources */,
@@ -987,6 +1028,7 @@
 				3FCCC85D1D928F14009CD14A /* GCDTimer.m in Sources */,
 				3F9FE0F91D9374950077198C /* CircleAnimationViewController.m in Sources */,
 				3F9FE10A1D93C38D0077198C /* MusicBarAnimationController.m in Sources */,
+				3F0B11CC1D9B8CF9008A6EBD /* TimeLineEventCell.swift in Sources */,
 				3F9FE0F31D93744D0077198C /* YXEasing.m in Sources */,
 				3F83941B1D9529D20076CE99 /* TimeLineNormalCell.swift in Sources */,
 				3F11DA911D93E32A00BD7465 /* DrawingColor.m in Sources */,
@@ -1010,6 +1052,7 @@
 				3FB69F1E1D73CA2B00859883 /* AppDelegate.swift in Sources */,
 				3FB69FAB1D74216F00859883 /* TimeLineController.swift in Sources */,
 				3F9FE1071D93C37A0077198C /* UIFont+Fonts.m in Sources */,
+				3F0B11C41D9B559F008A6EBD /* TimeLineAddEventController.swift in Sources */,
 				3F11DA9D1D93E39F00BD7465 /* NSObject+PropertiesInfomation.m in Sources */,
 				3FB69F901D73D1CE00859883 /* TabBarItem.swift in Sources */,
 				3F9FE0FF1D93A6840077198C /* EmitterSnowController.m in Sources */,
@@ -1025,6 +1068,7 @@
 				3FCCC83A1D926DF2009CD14A /* WaterFlowModel.swift in Sources */,
 				3F83940E1D94C0020076CE99 /* TimeLineCalendarCell.swift in Sources */,
 				3FB69FB01D7421A700859883 /* WhateverController.swift in Sources */,
+				3F8CCE691D9BC8210042483C /* TimeLineEventTableView.swift in Sources */,
 				3F8394131D94CA080076CE99 /* PopShowViewController.swift in Sources */,
 				3F9FE0F21D93744D0077198C /* easing.c in Sources */,
 				3F11DA951D93E35400BD7465 /* WaveView.m in Sources */,

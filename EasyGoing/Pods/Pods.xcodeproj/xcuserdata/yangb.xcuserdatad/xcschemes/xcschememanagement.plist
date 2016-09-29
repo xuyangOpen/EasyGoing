@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>CNPPopupController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CryptoSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -77,11 +82,6 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1B97E9CBA2A80BA1A7CDBB12AF61BFB0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>1C3436CEA5C3D39764C5F54374794ECB</key>
 		<dict>
 			<key>primary</key>
@@ -97,12 +97,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2C08D136F9DC59C8D4D929F546E01CF2</key>
+		<key>30943B25F0DEC51D0012EB94E0670356</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>30943B25F0DEC51D0012EB94E0670356</key>
+		<key>378E62266599A62BBCAB2A3E458F233D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,22 +112,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>39EC66646B8F9F1D6823D75BD9DB5984</key>
+		<key>444F34366268FA2B5E60A2177D364CA3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3CEBC867A033AF78709A3F520FD163C7</key>
+		<key>527E26FF37D9C7415E91A37F5AB8FA45</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>529F4876124F895F7BBC4AFBF623DBE0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>95AF2A7A2123FF52EBADB20BB3E11F7E</key>
+		<key>6DA403E0A955749FE0612AEBF8947C7B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -137,12 +132,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C4568D37089EF685C77B251CB7763E68</key>
+		<key>CBF3E8DAF03F8BF8BC172DD5F05622C8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D2D17D2E6A8AD8B5A2D1F30A3032805E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>DBA6001481CEA0EBA031CC5C94508FAA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD2DCD7F4EC4098065433EE5ED41A6E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F9F80DA55E727843724EED00EC3C70CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

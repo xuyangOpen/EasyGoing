@@ -13,7 +13,7 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var timeLineTableView = UITableView()
     //弹出层视图（height = cell默认高度44 * cell的个数5个）
-    let popView = WBPopOverView.init(origin: CGPointMake(Utils.screenWidth-25, 64), width: 170, height: 88, direction: WBArrowDirection.Up3)
+    let popView = WBPopOverView.init(origin: CGPointMake(Utils.screenWidth-25, 64), width: 170, height: 132, direction: WBArrowDirection.Up3)
     //弹出层表视图
     let popViewController:PopShowViewController = PopShowViewController()
     //MARK:数据源  （记得给数据源按消费项目排序）
@@ -147,8 +147,14 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let item = UIBarButtonItem.init(title: NSLocalizedString("TimeLine.navigation.back", comment: "返回"), style: .Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = item
         //设置右边的按钮
+//        let rightButton = UIButton.init(type: .Custom)
+//        rightButton.setImage(UIImage.init(named: "plus"), forState: .Normal)
+//        rightButton.bounds = CGRectMake(0, 0, 30, 30)
+//        rightButton.addTarget(self, action: #selector(clickRightBarButton), forControlEvents: .TouchUpInside)
         let rightBar = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: #selector(clickRightBarButton))
+//        let rightBar = UIBarButtonItem.init(customView: rightButton)
         self.navigationItem.rightBarButtonItem = rightBar
+        
     }
     
     //MARK:获取当前时间
@@ -187,6 +193,10 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 self.reloadData(self.title!)
             }
             self.navigationController?.pushViewController(addVC, animated: true)
+        case .AddEvent:
+            //跳转到消费项目列表界面
+            self.navigationController?.pushViewController(TimeLineAddEventController(), animated: true)
+            break
         case .DataStatistics:
             print("数据统计")
         default:break

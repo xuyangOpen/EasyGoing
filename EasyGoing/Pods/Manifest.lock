@@ -30,6 +30,7 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
+  - CNPPopupController (0.3.2)
   - CryptoSwift (0.5.2)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
@@ -50,6 +51,7 @@ DEPENDENCIES:
   - AFNetworking
   - AVOSCloud
   - BlocksKit
+  - CNPPopupController
   - CryptoSwift
   - FMDB
   - IQKeyboardManager
@@ -66,6 +68,7 @@ SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   AVOSCloud: 1fe170768bee7e05bc3ea86e38d5bddb105cb957
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  CNPPopupController: 359b331f0e164f1af1f3a9193aac10a820d0039e
   CryptoSwift: c1ef79f901b86099a6fe8b3c7524cf9f3f3c8c40
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   IQKeyboardManager: 50b62c0603308968256f8208886e206c1dcce607
@@ -78,6 +81,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 221b1ae2738aa05dd862a69d630883050adc5f7c
+PODFILE CHECKSUM: deb2d3f500f3901dfb8b52d1c13238f5b3f0a559
 
 COCOAPODS: 1.0.1

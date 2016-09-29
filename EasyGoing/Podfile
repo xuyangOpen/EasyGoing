@@ -19,6 +19,7 @@ pod 'pop'
 pod 'IQKeyboardManager'
 pod 'BlocksKit'
 pod 'SDAutoLayout'
+pod 'CNPPopupController'        #TimeLine项目添加弹出视图
 
 end
 

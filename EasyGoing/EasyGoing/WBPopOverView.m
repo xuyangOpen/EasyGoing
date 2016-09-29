@@ -184,22 +184,22 @@
 
 -(void)popView
 {
-    NSArray *result=[self.backView subviews];
-    for (UIView *view in result) {
-        
-        view.hidden=YES;
-        
-    }
+//    NSArray *result=[self.backView subviews];
+//    for (UIView *view in result) {
+//        
+//        view.hidden=YES;
+//        
+//    }
     
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     [keyWindow addSubview:self];
     //动画效果弹出
-    self.alpha = 0;
+//    self.alpha = 0;
     
     
     if (_direction==WBArrowDirectionLeft1) {
         self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y-20, self.width,self. height);
         }completion:^(BOOL finished) {
@@ -216,7 +216,7 @@
     else if (_direction==WBArrowDirectionLeft2)
     {
         self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y-self.height/2, self.width,self. height);
 
@@ -232,7 +232,7 @@
     else if (_direction==WBArrowDirectionLeft3)
     {
         self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x+5, self.origin.y-self.height+20, self.width,self. height);
         }completion:^(BOOL finished) {
@@ -248,7 +248,7 @@
     else if (_direction==WBArrowDirectionRight1)
     {
         self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y-20, -self.width,self. height);
         }completion:^(BOOL finished) {
@@ -266,7 +266,7 @@
     else if (_direction==WBArrowDirectionRight2)
     {
         self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y-self.height/2, -self.width,self. height);
         }completion:^(BOOL finished) {
@@ -284,7 +284,7 @@
     else if (_direction==WBArrowDirectionRight3)
     {
         self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-5, self.origin.y-self.height+20, -self.width,self. height);
         }completion:^(BOOL finished) {
@@ -301,62 +301,62 @@
     }
     else if (_direction==WBArrowDirectionUp1)
     {
-        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+//        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
+//        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-20, self.origin.y+5, self.width,self. height);
-        }completion:^(BOOL finished) {
-            
-            NSArray *result=[self.backView subviews];
-            for (UIView *view in result) {
-                
-                view.hidden=NO;
-                
-            }
-            
-        }];
+//        }completion:^(BOOL finished) {
+//            
+//            NSArray *result=[self.backView subviews];
+//            for (UIView *view in result) {
+//                
+//                view.hidden=NO;
+//                
+//            }
+//            
+//        }];
         
     }
     else if (_direction==WBArrowDirectionUp2)
     {
-        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+//        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
+//        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-self.width/2, self.origin.y+5, self.width,self. height);
-        }completion:^(BOOL finished) {
-            
-            NSArray *result=[self.backView subviews];
-            for (UIView *view in result) {
-                
-                view.hidden=NO;
-                
-            }
-            
-        }];
+//        }completion:^(BOOL finished) {
+//            
+//            NSArray *result=[self.backView subviews];
+//            for (UIView *view in result) {
+//                
+//                view.hidden=NO;
+//                
+//            }
+//            
+//        }];
         
     }
     else if (_direction==WBArrowDirectionUp3)
     {
-        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+//        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
+//        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x+20, self.origin.y+5, -self.width,self. height);
-        }completion:^(BOOL finished) {
-            
-            NSArray *result=[self.backView subviews];
-            for (UIView *view in result) {
-                
-                view.hidden=NO;
-                
-            }
-            
-        }];
+//        }completion:^(BOOL finished) {
+//            
+//            NSArray *result=[self.backView subviews];
+//            for (UIView *view in result) {
+//                
+//                view.hidden=NO;
+//                
+//            }
+//            
+//        }];
         
     }
     else if (_direction==WBArrowDirectionDown1)
     {
         self.backView.frame = CGRectMake(self.origin.x, self.origin.y-5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-20, self.origin.y-5, self.width,-self. height);
         }completion:^(BOOL finished) {
@@ -374,7 +374,7 @@
     else if (_direction==WBArrowDirectionDown2)
     {
         self.backView.frame = CGRectMake(self.origin.x, self.origin.y-5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-self.width/2, self.origin.y-5, self.width,-self. height);
         }completion:^(BOOL finished) {
@@ -392,7 +392,7 @@
     else if (_direction==WBArrowDirectionDown3)
     {
         self.backView.frame = CGRectMake(self.origin.x, self.origin.y-5, 0, 0);
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
             self.backView.frame = CGRectMake(self.origin.x-self.width+20, self.origin.y-5, self.width,-self. height);
         }completion:^(BOOL finished) {
@@ -412,23 +412,23 @@
 
 -(void)dismiss{
     
-    NSArray *result=[self.backView subviews];
-    for (UIView *view in result) {
-        
-        [view removeFromSuperview];
-
-    }
+//    NSArray *result=[self.backView subviews];
+//    for (UIView *view in result) {
+//        
+//        [view removeFromSuperview];
+//
+//    }
     
          //动画效果淡出
-    [UIView animateWithDuration:0.2 animations:^{
+//    [UIView animateWithDuration:0 animations:^{
         self.alpha = 0;
         self.backView.frame = CGRectMake(self.origin.x, self.origin.y, 0, 0);
-    } completion:^(BOOL finished) {
-        if (finished) {
+//    } completion:^(BOOL finished) {
+//        if (finished) {
             [self removeFromSuperview];
-                 
-        }
-    }];
+//                 
+//        }
+//    }];
      
 
 
