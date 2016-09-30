@@ -30,12 +30,12 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
-  - CNPPopupController (0.3.2)
   - CryptoSwift (0.5.2)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
   - IQKeyboardManager (4.0.5)
+  - JCAlertView (1.1.5)
   - MBProgressHUD (1.0.0)
   - MJRefresh (3.1.12)
   - pop (1.0.9)
@@ -45,16 +45,15 @@ PODS:
   - SDWebImage/Core (3.8.1)
   - SnapKit (0.22.0)
   - SwiftyJSON (2.3.2)
-  - YYModel (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking
   - AVOSCloud
   - BlocksKit
-  - CNPPopupController
   - CryptoSwift
   - FMDB
   - IQKeyboardManager
+  - JCAlertView
   - MBProgressHUD
   - MJRefresh
   - pop
@@ -62,16 +61,15 @@ DEPENDENCIES:
   - SDWebImage
   - SnapKit
   - SwiftyJSON
-  - YYModel
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   AVOSCloud: 1fe170768bee7e05bc3ea86e38d5bddb105cb957
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
-  CNPPopupController: 359b331f0e164f1af1f3a9193aac10a820d0039e
   CryptoSwift: c1ef79f901b86099a6fe8b3c7524cf9f3f3c8c40
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   IQKeyboardManager: 50b62c0603308968256f8208886e206c1dcce607
+  JCAlertView: c65a7b298b8b497b3db783d82f719b88f4914869
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
@@ -79,8 +77,7 @@ SPEC CHECKSUMS:
   SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SnapKit: 0dd2fd157330f1ea11fd84da13e6be8a7a22bae0
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: deb2d3f500f3901dfb8b52d1c13238f5b3f0a559
+PODFILE CHECKSUM: f88c259733fbd9c59b92fdad27d7a25b349753b2
 
 COCOAPODS: 1.0.1

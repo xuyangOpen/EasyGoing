@@ -41,6 +41,8 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
     
     var delegate:TimeLineCellDelete?        //cell的代理
     
+    var event:TimeLineEvent?
+    
     //cell打开时的回调
     var openCellClosure:tapCellClosure?
     
@@ -78,7 +80,7 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
             make.width.equalTo(btnWidth)
         }
         deleteButton.bk_addEventHandler({ (obj) in
-            print("cell中的删除按钮")
+    //        print("cell中的删除按钮")
             //防止按钮连续点击
             let button = obj as! UIButton
             button.enabled = false
@@ -95,13 +97,16 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
             make.height.equalTo(44)
             make.width.equalTo(btnWidth)
         }
-        updateButton.bk_addEventHandler({ (obj) in
-            print("cell中的修改按钮")
-            //防止按钮连续点击
-            let button = obj as! UIButton
-            button.enabled = false
-            self.delegate?.updateCellAction(event,cell: self,clickBtn: obj as! UIButton)
-            }, forControlEvents: .TouchUpInside)
+        //保存实体类
+        self.event = event
+        updateButton.addTarget(self, action: #selector(updateAction(_:)), forControlEvents: .TouchUpInside)
+//        updateButton.bk_addEventHandler({ (obj) in
+//            print("cell中的修改按钮")
+//            //防止按钮连续点击
+//            let button = obj as! UIButton
+//            button.enabled = false
+//            self.delegate?.updateCellAction(event,cell: self,clickBtn: obj as! UIButton)
+//            }, forControlEvents: .TouchUpInside)
         //cell的内容呈现视图
         mainCellView.backgroundColor = bgColor
         self.containerView.addSubview(mainCellView)
@@ -127,6 +132,13 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
             make.centerY.equalToSuperview()
             make.left.equalTo(icon.snp_right).offset(10)
         }
+    }
+    //修改操作回调代理
+    func updateAction(btn:UIButton){
+        print("cell中的修改按钮")
+        //防止按钮连续点击
+        btn.enabled = false
+        self.delegate?.updateCellAction(self.event!,cell: self,clickBtn: btn)
     }
     
     //MARK:UIScrollView的代理方法

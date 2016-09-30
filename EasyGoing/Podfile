@@ -11,7 +11,6 @@ pod 'AFNetworking'
 pod 'SwiftyJSON'
 pod 'CryptoSwift'
 pod 'FMDB'
-pod 'YYModel'
 pod 'MJRefresh'
 pod 'SDWebImage'
 pod 'AVOSCloud'
@@ -19,7 +18,7 @@ pod 'pop'
 pod 'IQKeyboardManager'
 pod 'BlocksKit'
 pod 'SDAutoLayout'
-pod 'CNPPopupController'        #TimeLine项目添加弹出视图
+pod 'JCAlertView'               #TimeLine模块-消费项目弹出视图
 
 end
 
