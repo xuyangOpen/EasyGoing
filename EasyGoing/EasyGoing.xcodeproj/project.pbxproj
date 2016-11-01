@@ -34,6 +34,7 @@
 		3F1B035C1D9E127C009F1665 /* default_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F1B03561D9E127C009F1665 /* default_nor@2x.png */; };
 		3F1B035D1D9E127C009F1665 /* warn_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F1B03571D9E127C009F1665 /* warn_high@2x.png */; };
 		3F1B035E1D9E127C009F1665 /* warn_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F1B03581D9E127C009F1665 /* warn_nor@2x.png */; };
+		3F750AFF1DAA1C0E0091AB8A /* DataStatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F750AFE1DAA1C0E0091AB8A /* DataStatisticViewController.swift */; };
 		3F83940E1D94C0020076CE99 /* TimeLineCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F83940D1D94C0020076CE99 /* TimeLineCalendarCell.swift */; };
 		3F8394111D94C9400076CE99 /* WBPopOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8394101D94C9400076CE99 /* WBPopOverView.m */; };
 		3F8394131D94CA080076CE99 /* PopShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8394121D94CA080076CE99 /* PopShowViewController.swift */; };
@@ -129,6 +130,7 @@
 		3FCF95651D752125004166E5 /* SZCalendarPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF95611D752125004166E5 /* SZCalendarPicker.m */; };
 		3FCF95661D752125004166E5 /* SZCalendarPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FCF95621D752125004166E5 /* SZCalendarPicker.xib */; };
 		3FCF95671D752125004166E5 /* SZCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF95641D752125004166E5 /* SZCalendarCell.m */; };
+		3FFCCD791DAB410400BE2368 /* PieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCCD781DAB410400BE2368 /* PieViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +188,7 @@
 		3F1B03561D9E127C009F1665 /* default_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_nor@2x.png"; sourceTree = "<group>"; };
 		3F1B03571D9E127C009F1665 /* warn_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warn_high@2x.png"; sourceTree = "<group>"; };
 		3F1B03581D9E127C009F1665 /* warn_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warn_nor@2x.png"; sourceTree = "<group>"; };
+		3F750AFE1DAA1C0E0091AB8A /* DataStatisticViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStatisticViewController.swift; sourceTree = "<group>"; };
 		3F83940D1D94C0020076CE99 /* TimeLineCalendarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineCalendarCell.swift; sourceTree = "<group>"; };
 		3F83940F1D94C9400076CE99 /* WBPopOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPopOverView.h; sourceTree = "<group>"; };
 		3F8394101D94C9400076CE99 /* WBPopOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPopOverView.m; sourceTree = "<group>"; };
@@ -315,6 +318,7 @@
 		3FCF95621D752125004166E5 /* SZCalendarPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SZCalendarPicker.xib; sourceTree = "<group>"; };
 		3FCF95631D752125004166E5 /* SZCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZCalendarCell.h; sourceTree = "<group>"; };
 		3FCF95641D752125004166E5 /* SZCalendarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SZCalendarCell.m; sourceTree = "<group>"; };
+		3FFCCD781DAB410400BE2368 /* PieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieViewController.swift; sourceTree = "<group>"; };
 		C656FC37B3B474D5AF33668C /* Pods-EasyGoing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyGoing.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyGoing/Pods-EasyGoing.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -403,6 +407,7 @@
 		3F83940C1D94BFD60076CE99 /* TimeLine */ = {
 			isa = PBXGroup;
 			children = (
+				3FFCCD771DAB40D700BE2368 /* DataStatistics */,
 				3F8394121D94CA080076CE99 /* PopShowViewController.swift */,
 				3F83940D1D94C0020076CE99 /* TimeLineCalendarCell.swift */,
 				3F83941A1D9529D20076CE99 /* TimeLineNormalCell.swift */,
@@ -792,6 +797,15 @@
 			name = Calendar;
 			sourceTree = "<group>";
 		};
+		3FFCCD771DAB40D700BE2368 /* DataStatistics */ = {
+			isa = PBXGroup;
+			children = (
+				3F750AFE1DAA1C0E0091AB8A /* DataStatisticViewController.swift */,
+				3FFCCD781DAB410400BE2368 /* PieViewController.swift */,
+			);
+			name = DataStatistics;
+			sourceTree = "<group>";
+		};
 		7CA958AB8DC245B1596AEB1D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1060,6 +1074,7 @@
 				3F9FE0F31D93744D0077198C /* YXEasing.m in Sources */,
 				3F83941B1D9529D20076CE99 /* TimeLineNormalCell.swift in Sources */,
 				3F11DA911D93E32A00BD7465 /* DrawingColor.m in Sources */,
+				3FFCCD791DAB410400BE2368 /* PieViewController.swift in Sources */,
 				3F11DA8F1D93E32A00BD7465 /* DrawRectObject.m in Sources */,
 				3FCCC84F1D928E3E009CD14A /* CAGradientView.m in Sources */,
 				3FCCC8601D928F3C009CD14A /* CAGradientViewController.m in Sources */,
@@ -1081,6 +1096,7 @@
 				3FB69FAB1D74216F00859883 /* TimeLineController.swift in Sources */,
 				3F9FE1071D93C37A0077198C /* UIFont+Fonts.m in Sources */,
 				3F0B11C41D9B559F008A6EBD /* TimeLineAddEventController.swift in Sources */,
+				3F750AFF1DAA1C0E0091AB8A /* DataStatisticViewController.swift in Sources */,
 				3F11DA9D1D93E39F00BD7465 /* NSObject+PropertiesInfomation.m in Sources */,
 				3FB69F901D73D1CE00859883 /* TabBarItem.swift in Sources */,
 				3F9FE0FF1D93A6840077198C /* EmitterSnowController.m in Sources */,

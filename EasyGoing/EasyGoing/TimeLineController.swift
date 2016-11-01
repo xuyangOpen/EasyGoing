@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDAutoLayout
 
 class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSource,menuSelectDelegate {
     
@@ -69,19 +68,7 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     self.dataSource.append(TimeLineRecord())
                     let objs = objects as! [AVObject]
                     for obj in objs{//将数据解析成类
-                        let model = TimeLineRecord()
-                     //   print(obj)
-                        //子目录
-                        let childEvent = obj.objectForKey("eventObject") as! AVObject
-                        let child = childEvent.objectForKey("eventName") as! String
-                        //父目录
-                        let parentEvent = childEvent.objectForKey("parentId") as! AVObject
-                        let parent = parentEvent.objectForKey("eventName") as! String
-                        model.recordEvent = parent + " - " + child
-                        model.recordCost = CGFloat(obj.objectForKey("recordCost").floatValue)
-                        model.recordTime = obj.objectForKey("recordTime") as! String
-                        model.recordMark = obj.objectForKey("recordMark") as! String
-                        self.dataSource.append(model)
+                        self.dataSource.append(TimeLineRecord.initRecordWithAVObject(obj))
                     }
                     self.timeLineTableView.reloadData()
                 }else{
@@ -146,11 +133,6 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         //设置返回按钮
         let item = UIBarButtonItem.init(title: NSLocalizedString("TimeLine.navigation.back", comment: "返回"), style: .Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = item
-        //设置右边的按钮
-//        let rightButton = UIButton.init(type: .Custom)
-//        rightButton.setImage(UIImage.init(named: "plus"), forState: .Normal)
-//        rightButton.bounds = CGRectMake(0, 0, 30, 30)
-//        rightButton.addTarget(self, action: #selector(clickRightBarButton), forControlEvents: .TouchUpInside)
         let rightBar = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: #selector(clickRightBarButton))
 //        let rightBar = UIBarButtonItem.init(customView: rightButton)
         self.navigationItem.rightBarButtonItem = rightBar
@@ -198,7 +180,8 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.navigationController?.pushViewController(TimeLineAddEventController(), animated: true)
             break
         case .DataStatistics:
-            print("数据统计")
+            //跳转到数据统计界面
+            self.navigationController?.pushViewController(DataStatisticViewController(), animated: true)
         default:break
         }
        

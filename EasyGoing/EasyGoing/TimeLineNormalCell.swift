@@ -22,6 +22,17 @@ class TimeLineNormalCell: UITableViewCell {
     let markSize = CGSizeMake(Utils.screenWidth-40, CGFloat.max)
     
     func setModel(model:TimeLineRecord){
+        //消费金额
+        self.contentView.addSubview(costLable)
+        costLable.text = String(model.recordCost) + "元"
+        costLable.textColor = UIColor.blackColor()
+        costLable.textAlignment = .Right
+        costLable.sizeToFit()
+        costLable.snp_makeConstraints { (make) in
+            make.right.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(10)
+            make.height.equalTo(20)
+        }
         //消费项目
         self.contentView.addSubview(eventLabel)
         eventLabel.text = model.recordEvent
@@ -29,6 +40,7 @@ class TimeLineNormalCell: UITableViewCell {
         eventLabel.snp_makeConstraints { (make) in
             make.left.equalToSuperview().offset(20)
             make.top.equalToSuperview().offset(10)
+            make.right.equalTo(costLable.snp_left).offset(-10)
             make.height.equalTo(20)
         }
         //色块
@@ -41,16 +53,7 @@ class TimeLineNormalCell: UITableViewCell {
             make.height.equalTo(15)
         }
         
-        //消费金额
-        self.contentView.addSubview(costLable)
-        costLable.text = String(model.recordCost) + "元"
-        costLable.textColor = UIColor.blackColor()
         
-        costLable.snp_makeConstraints { (make) in
-            make.right.equalToSuperview().offset(-20)
-            make.top.equalToSuperview().offset(10)
-            make.height.equalTo(20)
-        }
         if model.isExpand {//展开
             self.contentView.addSubview(markLabel)
             if model.recordMark == "" {

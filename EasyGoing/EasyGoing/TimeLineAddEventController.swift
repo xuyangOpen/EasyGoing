@@ -29,6 +29,7 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
     //子目录 -> ["objectId":[TimeLineEvent]]  通过父目录的objectId找到所有子目录的数组
     var childEvent = NSMutableDictionary()
     //分组展开或者关闭的属性数组  0表示关闭  1表示展开
+    var openOrCloseFlag = false  //true表示可以修改数组元素  false表示不能修改
     var openOrCloseArray = [String]()
     
     //保存头视图中标题label的数组（方便后面修改头视图标题时，直接通过数组获取标题视图）
@@ -60,8 +61,12 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
                         for obj in avObj{
                             self.dataSource?.append(TimeLineEvent.initEventWithAVObject(obj))
                         }
+                        //允许操作展开或者关闭的数组
+                        self.openOrCloseFlag = true
                         //配置数据源:将父目录和子目录分开
                         self.configDataSource(false)
+                        //操作完成之后权限关闭
+                        self.openOrCloseFlag = false
                         //配置表视图
                         self.eventTableView.reloadData()
                         
@@ -74,7 +79,10 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
             })
         }else{
             //配置表视图
+            //允许操作展开或者关闭的数组
+            self.openOrCloseFlag = true
             self.configDataSource(false)
+            self.openOrCloseFlag = false    //操作完成之后权限关闭
             self.eventTableView.reloadData()
         }
         
@@ -226,7 +234,9 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
                     //添加一个父目录
                     self.parentEvent.append(model)
                     //数组属性默认为关闭
-                    self.openOrCloseArray.append("0")
+                    if self.openOrCloseFlag {
+                        self.openOrCloseArray.append("0")
+                    }
                 }
             }
             //得到子目录，通过父目录的objectId，查找所有的子目录
@@ -304,7 +314,7 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
             self.eventTableView.parentView = nil
             print("head中的删除按钮")
             //删除操作
-         //   self.deleteGroup(self.parentEvent[section])
+            self.deleteGroup(self.parentEvent[section])
             }, forControlEvents: .TouchUpInside)
         
         deleteButton.snp_makeConstraints { (make) in
@@ -387,6 +397,7 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
             }else{
                 //计算当前分组的数据量
                 var indexPaths = [NSIndexPath]()
+                //删除一个分组之后，再次点击时，展开的分组不正确
                 for i in 0..<(self.childEvent[self.parentEvent[section].objectId]?.count)!{
                     let indexPath = NSIndexPath.init(forRow: i, inSection: section)
                     indexPaths.append(indexPath)
@@ -802,81 +813,46 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
             //先删除所有子项目
             let childArray = self.childEvent[event.objectId]
             if childArray != nil && childArray?.count>0{
-                let modelArray = childArray as! [TimeLineEvent]
-                //由于SB云存储技术不提供批量删除，无奈之下的下策，循环删除
-                //总数量
-                let totalCount = 0
-                for i in 0..<modelArray.count{
-                    //拼凑删除的条件语句
-                   var cql = "delete from TimeLineEvent where objectId='" + modelArray[i].objectId + "'"
-                    AVQuery.doCloudQueryInBackgroundWithCQL(cql, callback: { (result, error) in
-                        
-                    })
-                }
-//                print("删除子项目的cql语句为  = \(cql)")
-//                //开始删除子项目
-//                AVQuery.doCloudQueryInBackgroundWithCQL(cql, callback: { (result, error) in
-//                    if error == nil{
-//                        //开始删除父目录
-//                        self.deleteParentEvent(event)
-//                    }else{
-//                        print("删除子项目时，出现的错误  \(error.localizedDescription)")
-//                        Utils.sharedInstance.hud.hideAnimated(true)
-//                        Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
-//                    }
-//                })
+                //查询父目录
+                let query = AVQuery.init(className: "TimeLineEvent")
+                query.whereKey("objectId", equalTo: event.objectId)
+                query.findObjectsInBackgroundWithBlock({ (objects, error) in
+                    if error == nil{
+                        if objects.count == 1{
+                            //查询子目录
+                            let queryChild = AVQuery.init(className: "TimeLineEvent")
+                            queryChild.whereKey("parentId", equalTo: objects[0])
+                            queryChild.findObjectsInBackgroundWithBlock({ (childObjects, error) in
+                                if error == nil{
+                                    //删除项目
+                                    AVObject.deleteAllInBackground(childObjects, block: { (flag, deleteError) in
+                                        Utils.sharedInstance.hud.hideAnimated(true)
+                                        if deleteError == nil{
+                                            //删除完子项目之后，开始删除父目录，并调整数据
+                                            self.deleteParentEvent(event)
+                                        }else{
+                                            Utils.showHUDWithMessage(deleteError.localizedDescription, time: 2, block: {})
+                                        }
+                                    })
+                                }else{
+                                    Utils.sharedInstance.hud.hideAnimated(true)
+                                    Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
+                                }
+                            })
+                        }else{
+                            Utils.sharedInstance.hud.hideAnimated(true)
+                            Utils.showHUDWithMessage("当前目录不存在", time: 2, block: {})
+                        }
+                    }else{
+                        Utils.sharedInstance.hud.hideAnimated(true)
+                        Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
+                    }
+                })
             }else{
                 //没有子项目，直接删除父目录
                 self.deleteParentEvent(event)
             }
-//            
-//            let cql = "delete from TimeLineEvent where parentId='" + event.objectId + "'"
-//            //删除当前项目下的所有子类
-//            AVQuery.doCloudQueryInBackgroundWithCQL(cql, callback: { (result, error) in
-//                if error == nil{
-//                    //删除当前父目录
-//                    let cql = "delete from TimeLineEvent where objectId='" + event.objectId + "'"
-//                    AVQuery.doCloudQueryInBackgroundWithCQL(cql, callback: { (result, error) in
-//                        //取消加载视图
-//                        Utils.sharedInstance.hud.hideAnimated(true)
-//                        if error == nil{
-//                            Utils.showHUDWithMessage("删除成功", time: 1, block: {})
-//                            //更新视图
-//                            for i in 0..<(self.dataSource?.count)!{
-//                                //删除数据源中的父目录
-//                                if self.dataSource![i].objectId == event.objectId{
-//                                    self.dataSource?.removeAtIndex(i)
-//                                    break
-//                                }
-//                            }
-//                            //记录分组下标
-//                            var groupIndex = -1
-//                            for i in 0..<self.parentEvent.count{
-//                                //从父目录的数组中查找当前删除父目录是哪个下标
-//                                if self.parentEvent[i].objectId == event.objectId{
-//                                    //删除开关属性数组
-//                                    groupIndex = i
-//                                    self.openOrCloseArray.removeAtIndex(i)
-//                                    break
-//                                }
-//                            }
-//                            //配置数据源
-//                            self.configDataSource(false)
-//                            //删除分组
-//                            if groupIndex > 0{
-//                                self.eventTableView.deleteSections(NSIndexSet.init(index: groupIndex), withRowAnimation: .Fade)
-//                            }
-//                            
-//                        }else{
-//                            Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
-//                        }
-//                    })
-//                }else{
-//                    Utils.sharedInstance.hud.hideAnimated(true)
-//                    Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
-//                }
-//            })
-//            
+
             
         }, forControlEvents: .TouchUpInside)
         
@@ -923,6 +899,8 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
                             //删除分组
                             if groupIndex >= 0{
                                 self.eventTableView.deleteSections(NSIndexSet.init(index: groupIndex), withRowAnimation: .Fade)
+                                //删除分组之后，延时0.25秒等待动画完成之后更新列表，如果不更新，则会出现分组展开不正确
+                                self.performSelector(#selector(self.loadingTableView), withObject: nil, afterDelay: 0.25)
                             }
                         }
                     }else{
@@ -936,6 +914,11 @@ class TimeLineAddEventController: UIViewController,UITableViewDelegate,UITableVi
                 Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
             }
         })
+    }
+    
+    //刷新列表
+    func loadingTableView(){
+        self.eventTableView.reloadData()
     }
     
     //MARK:内存溢出方法

@@ -131,6 +131,21 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
                 //设置子目录的字典
                 self.childEvent.setValue(childArray, forKey: parentModel.objectId)
             }
+            //移除没有子目录的父目录
+            if self.parentEvent.count > 0 {
+                var count = 0
+                while true {
+                    if self.childEvent[self.parentEvent[count].objectId]?.count == 0 {
+                        self.parentEvent.removeAtIndex(count)
+                    }else{
+                        if count == self.parentEvent.count - 1 {
+                            break
+                        }else{
+                            count += 1
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -178,7 +193,10 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
                 if self.childIndex > childArray.count-1{
                     self.childIndex = childArray.count - 1
                 }
-                self.chooseCompleteClosure!(childArray[self.childIndex],self.parentIndex,self.childIndex)
+                //当子目录长度大于0时，才能回调
+                if childArray.count > 0 && self.childIndex < childArray.count{
+                    self.chooseCompleteClosure!(childArray[self.childIndex],self.parentIndex,self.childIndex)
+                }
                 
                 pickerView.reloadComponent(1)
             }

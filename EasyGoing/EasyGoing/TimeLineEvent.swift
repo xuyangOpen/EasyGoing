@@ -36,6 +36,14 @@ class TimeLineEvent: NSObject {
         return model
     }
     
+    //将TimeLineEvent类转换成AVObject
+    class func convertEventModelToAVObject(event:TimeLineEvent) -> AVObject{
+        let avObject = AVObject.init(className: "TimeLineEvent")
+        avObject.setObject(event.objectId, forKey: "objectId")
+        avObject.setObject(event.eventName, forKey: "eventName")
+        return avObject
+    }
+    
     /**
      let obj = AVObject.init(className: "TimeLineEvent")
      obj.setObject("投资", forKey: "eventName")

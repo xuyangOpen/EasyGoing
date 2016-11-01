@@ -17,8 +17,8 @@ pod 'AVOSCloud'
 pod 'pop'
 pod 'IQKeyboardManager'
 pod 'BlocksKit'
-pod 'SDAutoLayout'
 pod 'JCAlertView'               #TimeLine模块-消费项目弹出视图
+pod 'Charts'
 
 end
 

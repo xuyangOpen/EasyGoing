@@ -131,6 +131,7 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
         titleLabel.snp_makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.left.equalTo(icon.snp_right).offset(10)
+            make.width.equalTo(Utils.screenWidth - 80)
         }
     }
     //修改操作回调代理

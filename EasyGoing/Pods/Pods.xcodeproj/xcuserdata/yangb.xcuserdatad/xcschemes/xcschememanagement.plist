@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Charts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CryptoSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -45,11 +50,6 @@
 			<false/>
 		</dict>
 		<key>Pods-EasyGoing.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SDAutoLayout.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -87,11 +87,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>245BE13A8CE9A4B4057CF6C3D97BC50A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>29DD99664D189A7CA206368F493B1E0B</key>
 		<dict>
 			<key>primary</key>
@@ -107,17 +102,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>40593C418F248B87900439F7FC77CE00</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>77B3BA9331CD96D443870D1130D7E596</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8C786C42B1834F150369084E7DA7667C</key>
+		<key>5D4D4FDB29982F78FC430D2913BEDD22</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -127,7 +112,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>99B40E2E54C0C436822CBC6A5259E892</key>
+		<key>BB607487EBF7333A44513FD6BC409EAA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C6828C2508515BC0428D6BDAA1292DC9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -137,12 +127,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E2C055106D4DA68BE45323E4EFE0DBDA</key>
+		<key>DC23FAD127D511E1C169FF199DB8BAD7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E68A53E050AA76323B95785A599B5761</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E6AF542C0BD4B678F0B156D005629387</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E717E984A8B2ECFF8C4465D3E3CD9751</key>
 		<dict>
 			<key>primary</key>
 			<true/>
