@@ -17,3 +17,8 @@ import AFNetworking
         我的小金库
     */
     let TimeLine_record = "TimeLineRecord"
+
+
+    //MARK:表名的定义
+    //用户设置表（保存了用户登录的口令，设置信息）
+    let EGUser = "eg_user"

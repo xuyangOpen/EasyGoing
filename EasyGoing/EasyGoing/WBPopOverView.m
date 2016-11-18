@@ -25,12 +25,17 @@
 
 @implementation WBPopOverView
 
--(instancetype)initWithOrigin:(CGPoint)origin Width:(CGFloat)width Height:(float)height Direction:(WBArrowDirection)direction
+-(instancetype)initWithOrigin:(CGPoint)origin Width:(CGFloat)width Height:(CGFloat)height Direction:(WBArrowDirection)direction
 {
     if (self = [super initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)])
     {
         //背景颜色为无色
-        self.backgroundColor=[UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
+        
+        //添加一个遮盖视图
+        self.coverView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT-64)];
+        self.coverView.backgroundColor = [[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.4];
+        [self addSubview:self.coverView];
         
         //定义显示视图的参数
         self.origin = origin;
@@ -44,136 +49,142 @@
  //       self.backView.backgroundColor = [UIColor colorWithRed:127/255.0 green:190/255.0 blue:38/255.0 alpha:1.0];
         [self addSubview:self.backView];
     
+        //添加三角形
+        self.triangle = [[BackView alloc] initWithFrame:CGRectMake(origin.x, origin.y, 10, 5)];
+        [self.triangle setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:self.triangle];
+        
     }
 
     return self;
 }
 
 
--(void)drawRect:(CGRect)rect
-{
-    CGContextRef context=UIGraphicsGetCurrentContext();
-    
-    if (_direction==WBArrowDirectionLeft1) {
-        
-        
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX+5, startY-5);
-        CGContextAddLineToPoint(context, startX+5, startY+5);
-    }
-    else if (_direction==WBArrowDirectionLeft2)
-    {
-    
-        
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX+5, startY-5);
-        CGContextAddLineToPoint(context, startX+5, startY+5);
-    
-    }
-    else if (_direction==WBArrowDirectionLeft3)
-    {
-
-        
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX+5, startY-5);
-        CGContextAddLineToPoint(context, startX+5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionRight1)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX-5, startY-5);
-        CGContextAddLineToPoint(context, startX-5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionRight2)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX-5, startY-5);
-        CGContextAddLineToPoint(context, startX-5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionRight3)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX-5, startY-5);
-        CGContextAddLineToPoint(context, startX-5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionUp1)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX + 5, startY +5);
-        CGContextAddLineToPoint(context, startX -5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionUp2)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX + 5, startY +5);
-        CGContextAddLineToPoint(context, startX -5, startY+5);
-    }
-    else if (_direction==WBArrowDirectionUp3)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX + 5, startY +5);
-        CGContextAddLineToPoint(context, startX -5, startY+5);
-        
-    }
-    else if (_direction==WBArrowDirectionDown1)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX - 5, startY -5);
-        CGContextAddLineToPoint(context, startX +5, startY-5);
-        
-    }
-    else if (_direction==WBArrowDirectionDown2)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX - 5, startY -5);
-        CGContextAddLineToPoint(context, startX +5, startY-5);
-        
-    }
-    else if (_direction==WBArrowDirectionDown3)
-    {
-        CGFloat startX = self.origin.x;
-        CGFloat startY = self.origin.y;
-        CGContextMoveToPoint(context, startX, startY);//设置起点
-        CGContextAddLineToPoint(context, startX - 5, startY -5);
-        CGContextAddLineToPoint(context, startX +5, startY-5);
-        
-    }
-   
-    CGContextClosePath(context);
-    [self.backView.backgroundColor setFill];
-    [self.backgroundColor setStroke];
-    CGContextDrawPath(context, kCGPathFillStroke);
-    
- 
-
-}
+//-(void)drawRect:(CGRect)rect
+//{
+//    CGContextRef context=UIGraphicsGetCurrentContext();
+//    
+//    if (_direction==WBArrowDirectionLeft1) {
+//        
+//        
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX+5, startY-5);
+//        CGContextAddLineToPoint(context, startX+5, startY+5);
+//    }
+//    else if (_direction==WBArrowDirectionLeft2)
+//    {
+//    
+//        
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX+5, startY-5);
+//        CGContextAddLineToPoint(context, startX+5, startY+5);
+//    
+//    }
+//    else if (_direction==WBArrowDirectionLeft3)
+//    {
+//
+//        
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX+5, startY-5);
+//        CGContextAddLineToPoint(context, startX+5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionRight1)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX-5, startY-5);
+//        CGContextAddLineToPoint(context, startX-5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionRight2)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX-5, startY-5);
+//        CGContextAddLineToPoint(context, startX-5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionRight3)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX-5, startY-5);
+//        CGContextAddLineToPoint(context, startX-5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionUp1)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX + 5, startY +5);
+//        CGContextAddLineToPoint(context, startX -5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionUp2)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX + 5, startY +5);
+//        CGContextAddLineToPoint(context, startX -5, startY+5);
+//    }
+//    else if (_direction==WBArrowDirectionUp3)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX + 5, startY +5);
+//        CGContextAddLineToPoint(context, startX -5, startY+5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionDown1)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX - 5, startY -5);
+//        CGContextAddLineToPoint(context, startX +5, startY-5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionDown2)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX - 5, startY -5);
+//        CGContextAddLineToPoint(context, startX +5, startY-5);
+//        
+//    }
+//    else if (_direction==WBArrowDirectionDown3)
+//    {
+//        CGFloat startX = self.origin.x;
+//        CGFloat startY = self.origin.y;
+//        CGContextMoveToPoint(context, startX, startY);//设置起点
+//        CGContextAddLineToPoint(context, startX - 5, startY -5);
+//        CGContextAddLineToPoint(context, startX +5, startY-5);
+//        
+//    }
+//   
+//    CGContextClosePath(context);
+//    [self.backView.backgroundColor setFill];
+//    [self.backgroundColor setStroke];
+//    
+//    CGContextDrawPath(context, kCGPathFillStroke);
+//    
+// 
+//
+//}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
@@ -322,7 +333,7 @@
 //        self.backView.frame = CGRectMake(self.origin.x, self.origin.y+5, 0, 0);
 //        [UIView animateWithDuration:0 animations:^{
             self.alpha = 1;
-            self.backView.frame = CGRectMake(self.origin.x-self.width/2, self.origin.y+5, self.width,self. height);
+            self.backView.frame = CGRectMake((SCREEN_WIDTH-self.width)/2.0, self.origin.y+5, self.width,self. height);
 //        }completion:^(BOOL finished) {
 //            
 //            NSArray *result=[self.backView subviews];

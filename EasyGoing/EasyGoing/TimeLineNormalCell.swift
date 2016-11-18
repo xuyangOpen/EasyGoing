@@ -53,7 +53,6 @@ class TimeLineNormalCell: UITableViewCell {
             make.height.equalTo(15)
         }
         
-        
         if model.isExpand {//展开
             self.contentView.addSubview(markLabel)
             if model.recordMark == "" {

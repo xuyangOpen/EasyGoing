@@ -9,9 +9,10 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import BlocksKit
 
 //cell的代理方法
-protocol TimeLineCellDelete {
+protocol TimeLineCellDelete:NSCoding {
     func deleteCellAction(event:TimeLineEvent,cell:TimeLineEventCell,clickBtn:UIButton) -> Void      //删除项目
     func updateCellAction(event:TimeLineEvent,cell:TimeLineEventCell,clickBtn:UIButton) -> Void      //修改项目
 }
@@ -22,7 +23,7 @@ public enum UITableViewCellStatus : Int {
     case Open
 }
 
-typealias tapCellClosure = (TimeLineEventCell) -> Void
+typealias tapCellClosure = (TimeLineEventCell?) -> Void
 
 class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
 
@@ -39,7 +40,7 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
     let icon = UIImageView()                //小icon
     let titleLabel = UILabel()              //目录标题
     
-    var delegate:TimeLineCellDelete?        //cell的代理
+    weak var delegate:TimeLineCellDelete?        //cell的代理
     
     var event:TimeLineEvent?
     
@@ -49,94 +50,99 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
     //MARK:设置cell的内容
     func setContentOfCell(title:String,image:String,numberOfBtn:Int,beginOffset:CGFloat,bgColor:UIColor,event:TimeLineEvent,indexPath:NSIndexPath){
         //先移除所有子视图
-        for subview in self.contentView.subviews {
-            subview.removeFromSuperview()
-        }
+//        for subview in self.contentView.subviews {
+//            subview.removeFromSuperview()
+//        }
         
-        self.numberOfButton = numberOfBtn
-        //滚动视图
-        containerView.contentSize = CGSizeMake(Utils.screenWidth + btnWidth * CGFloat(numberOfBtn), 44)
-        containerView.contentOffset = CGPointMake(0, 0)
-        containerView.backgroundColor = UIColor.cyanColor()
-        containerView.bounces = false
-        containerView.showsHorizontalScrollIndicator = false
-        containerView.delegate = self
-        containerView.pagingEnabled = true
-        self.contentView.addSubview(containerView)
-        containerView.snp_makeConstraints { (make) in
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-            make.size.equalToSuperview()
-        }
-        //设置按钮
-        containerView.addSubview(deleteButton)
-        deleteButton.setTitle("删除", forState: .Normal)
-        deleteButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        deleteButton.backgroundColor = UIColor.redColor()
-        deleteButton.snp_makeConstraints { (make) in
-            make.right.equalTo(self.contentView)
-            make.top.equalToSuperview()
-            make.height.equalTo(44)
-            make.width.equalTo(btnWidth)
-        }
-        deleteButton.bk_addEventHandler({ (obj) in
-    //        print("cell中的删除按钮")
-            //防止按钮连续点击
-            let button = obj as! UIButton
-            button.enabled = false
-            self.delegate?.deleteCellAction(event,cell: self,clickBtn: obj as! UIButton)
-            }, forControlEvents: .TouchUpInside)
-        //设置修改按钮
-        containerView.addSubview(updateButton)
-        updateButton.setTitle("修改", forState: .Normal)
-        updateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        updateButton.backgroundColor = UIColor.lightGrayColor()
-        updateButton.snp_makeConstraints { (make) in
-            make.right.equalTo(deleteButton.snp_left)
-            make.top.equalToSuperview()
-            make.height.equalTo(44)
-            make.width.equalTo(btnWidth)
-        }
-        //保存实体类
-        self.event = event
-        updateButton.addTarget(self, action: #selector(updateAction(_:)), forControlEvents: .TouchUpInside)
-//        updateButton.bk_addEventHandler({ (obj) in
-//            print("cell中的修改按钮")
-//            //防止按钮连续点击
-//            let button = obj as! UIButton
-//            button.enabled = false
-//            self.delegate?.updateCellAction(event,cell: self,clickBtn: obj as! UIButton)
-//            }, forControlEvents: .TouchUpInside)
-        //cell的内容呈现视图
-        mainCellView.backgroundColor = bgColor
-        self.containerView.addSubview(mainCellView)
-        mainCellView.snp_makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview()
-            make.size.equalToSuperview()
-        }
-        //图片
-        icon.image = UIImage.init(named: image)
-        mainCellView.addSubview(icon)
-        icon.snp_makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.left.equalTo(beginOffset)
-            make.width.equalTo(20)
-            make.height.equalTo(20)
-        }
-        //文字
-        titleLabel.text = title
-        titleLabel.textColor = UIColor.blackColor()
-        mainCellView.addSubview(titleLabel)
-        titleLabel.snp_makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.left.equalTo(icon.snp_right).offset(10)
-            make.width.equalTo(Utils.screenWidth - 80)
+        if containerView.subviews.count == 0 {//第一次初始化时
+            self.numberOfButton = numberOfBtn
+            //滚动视图
+            containerView.contentSize = CGSizeMake(Utils.screenWidth + btnWidth * CGFloat(numberOfBtn), 44)
+            containerView.contentOffset = CGPointMake(0, 0)
+            containerView.backgroundColor = UIColor.cyanColor()
+            containerView.bounces = false
+            containerView.showsHorizontalScrollIndicator = false
+            containerView.delegate = self
+            containerView.pagingEnabled = true
+            self.contentView.addSubview(containerView)
+            containerView.snp_makeConstraints { (make) in
+                make.left.equalToSuperview()
+                make.top.equalToSuperview()
+                make.size.equalToSuperview()
+            }
+            //设置按钮
+            containerView.addSubview(deleteButton)
+            deleteButton.setTitle("删除", forState: .Normal)
+            deleteButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            deleteButton.backgroundColor = UIColor.redColor()
+            deleteButton.snp_makeConstraints { (make) in
+                make.right.equalTo(self.contentView)
+                make.top.equalToSuperview()
+                make.height.equalTo(44)
+                make.width.equalTo(btnWidth)
+            }
+            
+            deleteButton.buttonClickWithClosure({ [weak self] (obj) in
+                //防止按钮连续点击
+                let button = obj
+                button.enabled = false
+                self?.delegate?.deleteCellAction(event,cell: self!,clickBtn: obj)
+            })
+            //设置修改按钮
+            containerView.addSubview(updateButton)
+            updateButton.setTitle("修改", forState: .Normal)
+            updateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            updateButton.backgroundColor = UIColor.lightGrayColor()
+            updateButton.snp_makeConstraints { (make) in
+                make.right.equalTo(deleteButton.snp_left)
+                make.top.equalToSuperview()
+                make.height.equalTo(44)
+                make.width.equalTo(btnWidth)
+            }
+            //保存实体类
+            self.event = event
+            updateButton.addTarget(self, action: #selector(updateAction(_:)), forControlEvents: .TouchUpInside)
+            //cell的内容呈现视图
+            mainCellView.backgroundColor = bgColor
+            self.containerView.addSubview(mainCellView)
+            mainCellView.snp_makeConstraints { (make) in
+                make.top.equalToSuperview()
+                make.left.equalToSuperview()
+                make.size.equalToSuperview()
+            }
+            //图片
+            icon.image = UIImage.init(named: image)
+            mainCellView.addSubview(icon)
+            icon.snp_makeConstraints { (make) in
+                make.centerY.equalToSuperview()
+                make.left.equalTo(beginOffset)
+                make.width.equalTo(20)
+                make.height.equalTo(20)
+            }
+            //文字
+            titleLabel.text = title
+            titleLabel.textColor = UIColor.blackColor()
+            mainCellView.addSubview(titleLabel)
+            titleLabel.snp_makeConstraints { (make) in
+                make.centerY.equalToSuperview()
+                make.left.equalTo(icon.snp_right).offset(10)
+                make.width.equalTo(Utils.screenWidth - 80)
+            }
+        }else{//复用时
+            deleteButton.buttonClickWithClosure({ [weak self] (obj) in
+                let button = obj
+                button.enabled = false
+                self?.delegate?.deleteCellAction(event,cell: self!,clickBtn: obj)
+            })
+            //保存实体类
+            self.event = event
+            updateButton.addTarget(self, action: #selector(updateAction(_:)), forControlEvents: .TouchUpInside)
+            
+            titleLabel.text = title
         }
     }
     //修改操作回调代理
     func updateAction(btn:UIButton){
-        print("cell中的修改按钮")
         //防止按钮连续点击
         btn.enabled = false
         self.delegate?.updateCellAction(self.event!,cell: self,clickBtn: btn)
@@ -146,7 +152,17 @@ class TimeLineEventCell: UITableViewCell,UIScrollViewDelegate {
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if scrollView.contentOffset.x == 0 {
         }else{
-            self.openCellClosure!(self)
+            if self.openCellClosure != nil {
+                self.openCellClosure!(self)
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView.contentOffset.x == 0 {
+            if self.openCellClosure != nil {
+                self.openCellClosure!(nil)
+            }
         }
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVOSCloud
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,45 +18,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //初始化LeanCloud数据存储服务
         AVOSCloud.setApplicationId("Ib3GGpkADGmJzJO6hp0xTb6F-gzGzoHsz", clientKey: "k7rHYRTrnMG0AO07EO97qYzI")
         
-//        let home = HomeTabBarController()
-//        
-// //       let timeLine = UIStoryboard(name: "TimeLine",bundle: nil).instantiateViewControllerWithIdentifier("timeline")
-//        
-//        let nav1 = UINavigationController.init(rootViewController: TimeLineController())
-//        
-//        
-//        
-//        let nav2 = UINavigationController.init(rootViewController: ChartController())
-//        let nav3 = UINavigationController.init(rootViewController: WhateverController())
-//        let nav4 = UINavigationController.init(rootViewController: MeController())
-//        home.viewControllers = [nav1,nav2,nav3,nav4]
-        
-        let homeNav = UINavigationController.init(rootViewController: HomeViewController())
-        self.window?.rootViewController = homeNav
+        //判断是否登录
+//        AVUser.logOut()
+        let user = AVUser.currentUser()
+        if user == nil {//没有登录的情况下，跳转到登录界面
+            let loginNav = UINavigationController.init(rootViewController: LoginViewController())
+            loginNav.navigationBar.tintColor = Utils.allTintColor
+            self.window?.rootViewController = loginNav
+        }else{//已经登录的情况下，直接跳转到主界面
+            let homeNav = UINavigationController.init(rootViewController: HomeViewController())
+            homeNav.navigationBar.tintColor = Utils.allTintColor
+            self.window?.rootViewController = homeNav
+        }
         
         return true
     }
 
+//    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+//        return AVOSCloudSNS.handleOpenURL(url)
+//    }
+//    
+//    // When Build with IOS 9 SDK
+//    // For application on system below ios 9
+//    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+//        return AVOSCloudSNS.handleOpenURL(url)
+//    }
+//    
+//    // For application on system equals or larger ios 9
+//    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+//        return AVOSCloudSNS.handleOpenURL(url)
+//    }
+//    
+    
+    //MARK:程序即将要进入后台时
     func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        
     }
 
+    //MARK:程序已经进入后台
     func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
     }
 
+    //MARK:程序即将进入前台运行时
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        //如果正在加载设置界面，则视图动画继续运行
+        if Utils.sharedInstance.glassHour != nil && Utils.sharedInstance.glassHourParentView != nil{
+            Utils.sharedInstance.showHourGlassOnView(Utils.sharedInstance.glassHourParentView!)
+        }
     }
 
+    //MARK:程序已经进入前台运行时
     func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
     }
 
+    //MARK:程序即将终止时
     func applicationWillTerminate(application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
     }
 
 

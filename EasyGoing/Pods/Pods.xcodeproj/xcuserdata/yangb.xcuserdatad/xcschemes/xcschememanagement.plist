@@ -9,17 +9,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>AVOSCloud.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>BlocksKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Charts.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>CryptoSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,12 +39,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>MJRefresh.xcscheme</key>
+		<key>Masonry.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods-EasyGoing.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SAMKeychain.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -77,6 +77,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1474D74317EAD8C617A9DEF57CEBD2AE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1B2B967A0ECB7ABA23FDE65467FBD27A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>1C3436CEA5C3D39764C5F54374794ECB</key>
 		<dict>
 			<key>primary</key>
@@ -87,22 +97,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>29DD99664D189A7CA206368F493B1E0B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>30943B25F0DEC51D0012EB94E0670356</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>37C76CD246D637B8E4C586284A0D96B2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5D4D4FDB29982F78FC430D2913BEDD22</key>
+		<key>683B05E3F81619D60933F485C8D58193</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,12 +112,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BB607487EBF7333A44513FD6BC409EAA</key>
+		<key>A9A83F63385AA43314397B8DD375464B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6828C2508515BC0428D6BDAA1292DC9</key>
+		<key>CCC02DA9AC15FDE5E62536C8CDE5F465</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CE3C0C9DE8E122363FAFD5D183C23A92</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -127,22 +132,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DC23FAD127D511E1C169FF199DB8BAD7</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E68A53E050AA76323B95785A599B5761</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>E6AF542C0BD4B678F0B156D005629387</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E717E984A8B2ECFF8C4465D3E3CD9751</key>
+		<key>E8DF850C35CBEFDA6E43FE4221357BFA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F2C6FB0958EFF22E65D7D6E7EFFB9784</key>
 		<dict>
 			<key>primary</key>
 			<true/>

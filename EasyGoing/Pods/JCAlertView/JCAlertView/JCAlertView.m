@@ -96,9 +96,7 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
 @property (nonatomic, strong) UIButton *coverView;
 @property (nonatomic, weak) JCAlertView *alertView;
 @property (nonatomic, weak) id <JCViewControllerDelegate> delegate;
-
-//自定义拓展属性
-@property (nonatomic) CGRect alertViewOriginFrame;
+@property (nonatomic) CGRect originRect;
 
 @end
 
@@ -106,48 +104,48 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-  
-    //去掉屏幕截图
+    
 //    [self addScreenShot];
     [self addCoverView];
     [self addAlertView];
     
-    //键盘出现时监听
+    //注册键盘弹出和收回的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowHandle:) name:UIKeyboardWillShowNotification object:nil];
-    //键盘退出时监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideHandle:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-//键盘即将出现时
+#pragma mark 键盘即将出现时的处理方法
 - (void)keyboardWillShowHandle:(NSNotification *)noti{
-    //键盘高度
-    CGRect keyBoardFrame = [[[noti userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    //记录视图原位置
-    self.alertViewOriginFrame = self.alertView.frame;
+    //先保存弹出视图的原大小
+    self.originRect = self.alertView.frame;
     
-    //计算弹出视图的正确位置
-    //计算键盘顶部的高度
-    CGFloat keyBoardTopHeight = [[UIScreen mainScreen] bounds].size.height - keyBoardFrame.size.height;
-    //设置弹出视图的底部和键盘顶部对齐
-    CGRect frame = self.alertView.frame;
-    //弹出视图的顶部 = 键盘顶部 - 弹出视图的高度
-    frame.origin.y = keyBoardTopHeight - frame.size.height;
+    //获取键盘的高度
+    NSDictionary *userInfo = [noti userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    CGFloat height = keyboardRect.size.height;
+
+    //如果弹出视图的 MAXY 大于 键盘弹出高度，则弹出视图向上移动
+    if (CGRectGetMaxY(self.alertView.frame) > (JCScreenHeight - height)) {
+        [UIView animateWithDuration:0.5 animations:^{
+            CGRect rect = self.alertView.frame;
+            rect.origin.y = (JCScreenHeight - height) - self.alertView.frame.size.height;
+            self.alertView.frame = rect;
+        }];
+    }
     
-    [UIView animateWithDuration:0.5 animations:^{
-        self.alertView.frame = frame;
-    }];
+    
 }
 
-//键盘即将消失时
+#pragma mark 键盘即将消失时的处理方法
 - (void)keyboardWillHideHandle:(NSNotification *)noti{
-    //还原视图
     [UIView animateWithDuration:0.5 animations:^{
-        self.alertView.frame = self.alertViewOriginFrame;
+        self.alertView.frame = self.originRect;
     }];
 }
 
-- (void)dealloc{
-    //在控制器被释放掉时，注销通知
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -272,7 +270,8 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
 
 - (void)addCoverView{
     self.coverView = [[UIButton alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.coverView.backgroundColor = JCColor(5, 0, 10);
+    self.coverView.backgroundColor = [[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:1];
+    //JCColor(105, 105, 105);
     [self.coverView addTarget:self action:@selector(coverViewClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.coverView];
 }
@@ -302,7 +301,7 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
     self.alertView.alpha = 0;
     [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.screenShotView.alpha = 1;
-        self.coverView.alpha = 0.65;
+        self.coverView.alpha = 0.4;
         self.alertView.alpha = 1.0;
     } completion:^(BOOL finished) {
         for (UIButton *btn in self.alertView.subviews) {
@@ -677,19 +676,18 @@ buttonType ButtonTitle:(NSString *)buttonTitle Click:(clickHandle)click ButtonTy
     UIImage *highImage = nil;
     switch (buttonType) {
         case JCAlertViewButtonTypeDefault:
-            //JCAlertView.bundle/
-            normalImage = [UIImage imageNamed:@"default_nor"];
-            highImage = [UIImage imageNamed:@"default_high"];
+            normalImage = [UIImage imageNamed:@"JCAlertView.bundle/default_nor"];
+            highImage = [UIImage imageNamed:@"JCAlertView.bundle/default_high"];
             textColor = JCColor(255, 255, 255);
             break;
         case JCAlertViewButtonTypeCancel:
-            normalImage = [UIImage imageNamed:@"cancel_nor"];
-            highImage = [UIImage imageNamed:@"cancel_high"];
+            normalImage = [UIImage imageNamed:@"JCAlertView.bundle/cancel_nor"];
+            highImage = [UIImage imageNamed:@"JCAlertView.bundle/cancel_high"];
             textColor = JCColor(255, 255, 255);
             break;
         case JCAlertViewButtonTypeWarn:
-            normalImage = [UIImage imageNamed:@"warn_nor"];
-            highImage = [UIImage imageNamed:@"warn_high"];
+            normalImage = [UIImage imageNamed:@"JCAlertView.bundle/warn_nor"];
+            highImage = [UIImage imageNamed:@"JCAlertView.bundle/warn_high"];
             textColor = JCColor(255, 255, 255);
             break;
     }

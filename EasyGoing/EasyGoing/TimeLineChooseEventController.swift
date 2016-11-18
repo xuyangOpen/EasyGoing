@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import AVOSCloud
 
 //参数1：当前选中的消费类型  参数2：父目录的选中下标  参数2：子目录的选中下标
 typealias chooseEventClosure = (TimeLineEvent,Int,Int) -> Void
@@ -44,41 +45,34 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
             //查询数据
             let query = AVQuery.init(className: "TimeLineEvent")
             //降序排列，把最新的显示在最前面
-            query.orderByDescending("updatedAt")
+            query.orderByDescending("createdAt")
             //查询userId为空的数据
-            query.whereKey("userId", equalTo: "")
-            query.findObjectsInBackgroundWithBlock({ (objs, error) in
+            query.whereKey("userId", equalTo: AVUser.currentUser()!.objectId!)
+            query.findObjectsInBackgroundWithBlock({ [weak self] (objs, error) in
                 if error == nil{
-                    if objs.count > 0{//print("数据长度== \(objs.count)")
-                        self.dataSource = [TimeLineEvent]()
+                    if objs!.count > 0{//print("数据长度== \(objs.count)")
+                        self?.dataSource = [TimeLineEvent]()
                         let avObj = objs as! [AVObject]
                         for obj in avObj{
-                            let model = TimeLineEvent()
-                            model.objectId = obj.objectForKey("objectId") as! String
-                            model.eventName = obj.objectForKey("eventName") as! String
-                            let date = obj.objectForKey("updatedAt") as! NSDate
-                            model.updatedAt = String(date.timeIntervalSince1970 * 1000)
-                            //查询父目录id
-                            if obj.objectForKey("parentId") != nil{
-                                let parentObject = obj.objectForKey("parentId") as! AVObject
-                                model.parentId = parentObject.objectForKey("objectId") as! String
-                            }
-                            if obj.objectForKey("userId") != nil{
-                                model.userId = obj.objectForKey("userId") as! String
-                            }
-                            self.dataSource?.append(model)
+                            self?.dataSource?.append(TimeLineEvent.initEventWithAVObject(obj))
                         }
-                        //保存数据到本地
-                        Utils.eventDataSource = self.dataSource
+                        //保存数据
+                        Utils.eventDataSource = self?.dataSource
                         //配置数据源:将父目录和子目录分开
-                        self.configDataSource()
+                        self?.configDataSource()
                         //初始化视图
-                        self.configPickView()
+                        self?.configPickView()
+                        
+                        //回调选中方法，第一次加载时，自动选中第一组第一个项目
+                        if self?.chooseCompleteClosure != nil {
+                            let childArray = self?.childEvent.valueForKey(self!.parentEvent[self!.parentIndex].objectId) as! [TimeLineEvent]
+                            self?.chooseCompleteClosure!(childArray[self!.childIndex],self!.parentIndex,self!.childIndex)
+                        }
                     }else{
                         Utils.showHUDWithMessage("没有查询到数据", time: 1, block: {})
                     }
                 }else{
-                    Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
+                    Utils.showHUDWithMessage(error!.localizedDescription, time: 2, block: {})
                 }
             })
         }else{
@@ -151,14 +145,16 @@ class TimeLineChooseEventController: UIViewController,UIPickerViewDelegate,UIPic
     
     //MARK:设置PickView的默认选中项
     func defaultSelect(parentIndex:Int,childIndex:Int){
-        //设置组件1选中下标
-        self.eventPickView.selectRow(parentIndex, inComponent: 0, animated: false)
-        //设置当前父目录选中下标
-        self.parentIndex = parentIndex
-        //设置组件2选中下标
-        self.eventPickView.selectRow(childIndex, inComponent: 1, animated: false)
-        //设置子目录选中下标
-        self.childIndex = childIndex
+        if self.parentEvent.count > parentIndex && self.childEvent.count > childIndex {
+            //设置组件1选中下标
+            self.eventPickView.selectRow(parentIndex, inComponent: 0, animated: false)
+            //设置当前父目录选中下标
+            self.parentIndex = parentIndex
+            //设置组件2选中下标
+            self.eventPickView.selectRow(childIndex, inComponent: 1, animated: false)
+            //设置子目录选中下标
+            self.childIndex = childIndex
+        }
     }
     
     //MARK:UIPickView的代理方法

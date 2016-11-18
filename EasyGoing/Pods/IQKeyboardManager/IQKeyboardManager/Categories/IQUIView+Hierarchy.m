@@ -85,14 +85,14 @@
     
     UIResponder *matchController = [self viewController];
     
-    while (matchController != nil && [controllersHierarchy containsObject:matchController] == NO)
-    {
-        do
-        {
-            matchController = [matchController nextResponder];
-            
-        } while (matchController != nil && [matchController isKindOfClass:[UIViewController class]] == NO);
-    }
+//    while (matchController != nil && [controllersHierarchy containsObject:matchController] == NO)
+//    {
+//        do
+//        {
+//            matchController = [matchController nextResponder];
+//            
+//        } while (matchController != nil && [matchController isKindOfClass:[UIViewController class]] == NO);
+//    }
     
     return (UIViewController*)matchController;
 }

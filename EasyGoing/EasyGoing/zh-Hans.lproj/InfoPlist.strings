@@ -6,4 +6,4 @@
   Copyright © 2016年 kf. All rights reserved.
 */
 
-CFBundleDisplayName = "随心记";    //应用在桌面的名称
+CFBundleDisplayName = "EasyGoing";    //应用在桌面的名称

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import AVOSCloud
+
+typealias recordDeleteClosure = (NSError?) -> Void
 
 class TimeLineRecord: NSObject {
 
@@ -17,6 +20,7 @@ class TimeLineRecord: NSObject {
     var parentName = ""
     
     //数据库对应字段
+    var objectId = ""                       //主键id
     var userId = ""                         //用户id
     var recordTime = ""                     //消费时间
     var recordEvent = ""                    //消费项目
@@ -27,6 +31,7 @@ class TimeLineRecord: NSObject {
     //将AVObject类转换成TimeLineRecord类
     class func initRecordWithAVObject(avObject:AVObject) -> TimeLineRecord{
         let model = TimeLineRecord()
+        model.objectId = avObject.objectForKey("objectId") as! String
         let childEvent = avObject.objectForKey("eventObject") as! AVObject
         let child = childEvent.objectForKey("eventName") as! String
         //获取当前分类的objectId
@@ -39,10 +44,22 @@ class TimeLineRecord: NSObject {
         //获取当前分类的父目录objectId
         model.parentId = parentEvent.objectForKey("objectId") as! String
         model.recordEvent = model.parentName + " - " + child
-        model.recordCost = CGFloat(avObject.objectForKey("recordCost").floatValue)
+        model.recordCost = avObject.objectForKey("recordCost") as! CGFloat
         model.recordTime = avObject.objectForKey("recordTime") as! String
         model.recordMark = avObject.objectForKey("recordMark") as! String
         
         return model
+    }
+    
+    //MARK:删除
+    class func deleteModel(model: TimeLineRecord, complete: recordDeleteClosure){
+        
+        AVQuery.doCloudQueryInBackgroundWithCQL("delete from TimeLineRecord where objectId='" + model.objectId + "' ") { (result, error) in
+            if error == nil{
+                complete(nil)
+            }else{
+                complete(error)
+            }
+        }
     }
 }

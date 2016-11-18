@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BlocksKit
+import AVOSCloud
 
 typealias executeInBlockClosure = () ->Void
 //更新数据的块，如果添加了当前日期（当前选中日期，不一定是当天）的数据，则回调更新块
@@ -62,27 +62,21 @@ class AddRecordViewController: UIViewController {
     //MARK:选择时间
     @IBAction func chooseTimeAction(sender: AnyObject) {
         //弹出日历
-        let dimView = UIView.init(frame: Utils.keyWindow.frame)
-        Utils.keyWindow.addSubview(dimView)
-        dimView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.5)
- 
-        let calendar = SZCalendarPicker.showOnView(dimView)
-        calendar.today = NSDate()
-        calendar.date = calendar.today
-        calendar.snp_makeConstraints { (make) in
-            make.width.equalToSuperview()
-            make.height.equalTo(300)
-            make.center.equalToSuperview()
+        let chooseCalendarVC = ShowCalendarController()
+        chooseCalendarVC.view.frame = Utils.keyWindow.frame
+        
+        Utils.keyWindow.addSubview(chooseCalendarVC.view)
+        //设置当前日期
+        let fmt = NSDateFormatter()
+        fmt.dateFormat = "yyyy-MM-dd"
+        let date = fmt.dateFromString(self.addTimeString)
+        if date != nil {
+            chooseCalendarVC.beginShow(date!)
         }
-        calendar.backgroundColor = Utils.bgColor
-        calendar.calendarBlock = {
-            (day,month,year) in
-            self.timeButton.setTitle(String.init(format: "%d-%02d-%02d", year,month,day), forState: .Normal)
-                dimView.removeFromSuperview()
-        }
-        //执行动画，弹出视图，参数1：整个视图背景  参数2：主要显示的视图
-        self.executeAnimation(dimView,mainView: calendar) {
-            dimView.layoutSubviews()
+        
+        chooseCalendarVC.chooseComplete = { [weak self] (year,month,day) in
+            self?.timeButton.setTitle(String.init(format: "%d-%02d-%02d", year,month,day), forState: .Normal)
+            chooseCalendarVC.view.removeFromSuperview()
         }
     }
     
@@ -91,35 +85,36 @@ class AddRecordViewController: UIViewController {
         //背景
         let dimView = UIView.init(frame: Utils.keyWindow.frame)
         Utils.keyWindow.addSubview(dimView)
-        dimView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.5)
+        dimView.backgroundColor = Utils.coverColor
         
-        if chooseEventVC == nil {
-            chooseEventVC = TimeLineChooseEventController()
-        }
+        chooseEventVC = TimeLineChooseEventController()
         dimView.addSubview(chooseEventVC!.view)
-        chooseEventVC!.view.snp_makeConstraints { (make) in
-            make.center.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalTo(300)
-        }
+        //给视图出现添加个动画
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5, options: .TransitionFlipFromLeft, animations: {
+            self.chooseEventVC!.view.frame = CGRectMake(0, (Utils.screenHeight-300)/2.0, Utils.screenWidth, Utils.scaleFloat(300))
+        }, completion: nil)
         //选择内容之后的回调
-        chooseEventVC!.chooseCompleteClosure = {
-            (event,parentIndex,childIndex) in
+        self.chooseEventVC!.chooseCompleteClosure = { [weak self] (event,parentIndex,childIndex) in
             //参数说明：消费项目类、父目录选中下标、子目录选中下标
-            self.event = event
-            self.parentIndex = parentIndex
-            self.childIndex = childIndex
-            self.eventButton.setTitle((self.event?.parentName)!+" - "+(self.event?.eventName)!, forState: .Normal)
+            self?.event = event
+            self?.parentIndex = parentIndex
+            self?.childIndex = childIndex
+            self?.eventButton.setTitle((self?.event?.parentName)!+" - "+(self?.event?.eventName)!, forState: .Normal)
         }
-        chooseEventVC!.defaultSelect(self.parentIndex, childIndex: self.childIndex)
-        //弹出视图
-        self.executeAnimation(dimView, mainView: chooseEventVC!.view) { 
-            dimView.layoutSubviews()
-        }
+        self.chooseEventVC!.defaultSelect(self.parentIndex, childIndex: self.childIndex)
         
-        
+        //添加一个手势
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(closeChooseEventMenu(_:)))
+        dimView.addGestureRecognizer(tap)
     }
     
+    //MARK:关闭选择消费项目的视图
+    func closeChooseEventMenu(tap: UITapGestureRecognizer){
+        let point = tap.locationInView(tap.view)
+        if !CGRectContainsPoint(chooseEventVC!.view.frame, point) {
+            tap.view?.removeFromSuperview()
+        }
+    }
     
     //MARK:提交表单
     @IBAction func submitAction(sender: AnyObject) {
@@ -144,14 +139,14 @@ class AddRecordViewController: UIViewController {
             Utils.sharedInstance.showLoadingView(NSLocalizedString("AddRecordViewController.save.loading", comment: "保存中"))
             //表单验证成功，提交表单
             let testObj = AVObject.init(className: "TimeLineRecord")
-            testObj.setObject("", forKey: "userId")
+            testObj.setObject(AVUser.currentUser()?.objectId, forKey: "userId")
             testObj.setObject(time.1, forKey: "recordTime")
             //添加消费项目
             testObj.setObject(AVObject.init(className: "TimeLineEvent", objectId: self.event!.objectId), forKey: "eventObject")
             testObj.setObject(Float(cost.1), forKey: "recordCost")
             testObj.setObject(mark.1, forKey: "recordMark")
             testObj.saveInBackgroundWithBlock({ (saveResult, error) in
-                Utils.sharedInstance.hud.hideAnimated(true)
+                Utils.sharedInstance.hideLoadingView()
                 if saveResult{
                     self.clearTextContent()//保存成功之后清除内容
                     Utils.showHUDWithMessage(NSLocalizedString("AddRecordViewController.save.success", comment: "保存成功"), time: 1, block: {
@@ -161,7 +156,7 @@ class AddRecordViewController: UIViewController {
                         }
                     })
                 }else{
-                    Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
+                    Utils.showHUDWithMessage(error!.localizedDescription, time: 2, block: {})
                 }
                 self.timeButton.enabled = true
             })
@@ -179,28 +174,12 @@ class AddRecordViewController: UIViewController {
         self.eventButton.setTitle(NSLocalizedString("AddRecordViewController.error.event", comment: "请选择消费项目"), forState: .Normal)
     }
     
-    //执行动画的方法
-    func executeAnimation(parentView:UIView,mainView:UIView,block:executeInBlockClosure){
-        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseIn, animations: {
-            block()
-            }, completion: { (flag) in
-                //添加一个关闭按钮
-                let closeBtn = UIButton.init(type: .Custom)
-                closeBtn.setImage(UIImage.init(named: "close"), forState: .Normal)
-                //点击时，移除视图
-                closeBtn.bk_addEventHandler({ (obj) in
-                    parentView.removeFromSuperview()
-                    
-                    self.chooseEventVC = nil
-                    }, forControlEvents: .TouchUpInside)
-                parentView.addSubview(closeBtn)
-                closeBtn.snp_makeConstraints { (make) in
-                    make.right.equalToSuperview().offset(-3)
-                    make.bottom.equalTo(mainView.snp_top).offset(-3)
-                    make.height.equalTo(30)
-                    make.width.equalTo(30)
-                }
-        })
+    //MARK:页面销毁时，清除缓存数据
+    deinit{
+        print("添加消费记录页面释放")
+        if Utils.eventDataSource != nil {
+            Utils.eventDataSource = nil
+        }
     }
     
     override func didReceiveMemoryWarning() {

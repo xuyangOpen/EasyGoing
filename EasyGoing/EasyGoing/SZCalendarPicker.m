@@ -176,7 +176,7 @@ NSString *const SZCalendarCellIdentifier = @"cell";
             [cell.dateLabel setText:@""];
         }else{
             day = i - firstWeekday + 1;
-            [cell.dateLabel setText:[NSString stringWithFormat:@"%li",day]];
+            [cell.dateLabel setText:[NSString stringWithFormat:@"%li",(long)day]];
             [cell.dateLabel setTextColor:[UIColor colorWithHexString:@"#6f6f6f"]];
             
             NSString *compareString = [self getFormatterDateString:self.date replaceStr:cell.dateLabel.text];

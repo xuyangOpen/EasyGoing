@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import "BackView.h"
 
 typedef NS_ENUM(NSUInteger,WBArrowDirection){
 
@@ -30,8 +31,10 @@ typedef NS_ENUM(NSUInteger,WBArrowDirection){
 
 @interface WBPopOverView : UIView
 @property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIView *coverView;
+@property (nonatomic, strong) BackView *triangle;
 
--(instancetype)initWithOrigin:(CGPoint)origin Width:(CGFloat)width Height:(float)height Direction:(WBArrowDirection)direction;//初始化
+-(instancetype)initWithOrigin:(CGPoint)origin Width:(CGFloat)width Height:(CGFloat)height Direction:(WBArrowDirection)direction;//初始化
 
 -(void)popView;//弹出视图
 -(void)dismiss;//隐藏视图

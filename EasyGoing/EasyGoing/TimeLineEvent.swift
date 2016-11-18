@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVOSCloud
 
 class TimeLineEvent: NSObject {
     
@@ -17,13 +18,22 @@ class TimeLineEvent: NSObject {
     var userId = ""                     //用户id
     
     var updatedAt = ""                  //更新时间
+    var createdAt = ""                  //创建时间
+    var isDelete = ""                   //是否已经删除
     
     //通过AVObject初始化TimeLineEvent类
     class func initEventWithAVObject(avObject:AVObject) -> TimeLineEvent{
         let model = TimeLineEvent()
         model.eventName = avObject.objectForKey("eventName") as! String
+        //更新时间
         let date = avObject.objectForKey("updatedAt") as! NSDate
         model.updatedAt = String(date.timeIntervalSince1970 * 1000)
+        //创建时间
+        let createdDate = avObject.objectForKey("createdAt") as! NSDate
+        model.createdAt = String(createdDate.timeIntervalSince1970 * 1000)
+        //是否已经删除
+        model.isDelete = avObject.objectForKey("isDelete") as! String
+        //主键
         model.objectId = avObject.objectForKey("objectId") as! String
         if avObject.objectForKey("userId") != nil{
             model.userId = avObject.objectForKey("userId") as! String
@@ -41,6 +51,9 @@ class TimeLineEvent: NSObject {
         let avObject = AVObject.init(className: "TimeLineEvent")
         avObject.setObject(event.objectId, forKey: "objectId")
         avObject.setObject(event.eventName, forKey: "eventName")
+        if event.userId != "" {
+            avObject.setObject(event.userId, forKey: "userId")
+        }
         return avObject
     }
     

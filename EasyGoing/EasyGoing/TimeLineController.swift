@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVOSCloud
 
 class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSource,menuSelectDelegate {
     
@@ -20,6 +21,21 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
     //定义一个cell，用计算cell的高度
     var cellForHeight = TimeLineNormalCell()
     
+    //日历视图
+    var calendarController = UIViewController()
+    var calendar = PDCalendarViewController()
+    
+    //统计视图
+    var statisticalView:StatisticalView?
+    //当前选中日期
+    var dateString = ""
+    
+    //顶部头视图
+    var titileView = TitleView.init(frame: CGRectMake(0, 0, 100, 40), title: String.init(format: "%d-%02d", PDCalendarAttribute.year(NSDate()),PDCalendarAttribute.month(NSDate())))
+    //顶部头视图弹出层视图
+    let chooseDatePopView = WBPopOverView.init(origin: CGPointMake(Utils.screenWidth/2.0, 64), width: Utils.scaleFloat(300), height: Utils.scaleFloat(200), direction: WBArrowDirection.Up2)
+    let chooseDateController = ChooseDateController()
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -29,7 +45,6 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         //设置导航栏
         setNavigation()
-        self.dataSource.append(TimeLineRecord())
         self.configTableView()
         //初始化当日的数据
         self.reloadData(self.getCurrentTime())
@@ -43,8 +58,6 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.timeLineTableView.separatorStyle = .None
         self.view.addSubview(self.timeLineTableView)
         
-        //注册日历cell
-        self.timeLineTableView.registerClass(TimeLineCalendarCell.self, forCellReuseIdentifier: "calendarCell")
         //注册数据显示cell
         self.timeLineTableView.registerClass(TimeLineNormalCell.self, forCellReuseIdentifier: "timeLineDataCell")
     }
@@ -60,45 +73,64 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         //二级级联查询，查询子目录的父目录
         query.includeKey("eventObject.parentId")
         
-        query.findObjectsInBackgroundWithBlock { (objects, error) in
-            if error == nil{//print("数据长度  \(objects.count)")
-                if objects.count > 0 {
-                    //先移除之前的，然后添加一个日历占位的
-                    self.dataSource.removeAll()
-                    self.dataSource.append(TimeLineRecord())
-                    let objs = objects as! [AVObject]
-                    for obj in objs{//将数据解析成类
-                        self.dataSource.append(TimeLineRecord.initRecordWithAVObject(obj))
-                    }
-                    self.timeLineTableView.reloadData()
-                }else{
-                    Utils.showHUDWithMessage("当天没有数据", time: 1, block: {})
-                    self.dataSource.removeAll()
-                    self.dataSource.append(TimeLineRecord())
-                    self.timeLineTableView.reloadData()
-                }
-            }else{
-                print(error.localizedDescription)
-                Utils.showHUDWithMessage(error.localizedDescription, time: 2, block: {})
+        query.findObjectsInBackgroundWithTarget(self, selector: #selector(callbackWithResult(_:error:)))
+    }
+    
+    //MARK:查询结果的回调方法
+    func callbackWithResult(objects: NSArray, error: NSError){
+        if objects.count > 0 {
+            self.dataSource.removeAll()
+            let objs = objects as! [AVObject]
+            for obj in objs{//将数据解析成类
+                self.dataSource.append(TimeLineRecord.initRecordWithAVObject(obj))
             }
+            self.timeLineTableView.reloadSections(NSIndexSet.init(index: 1), withRowAnimation: .Fade)
+        }else{
+            Utils.showHUDWithMessage("当天没有数据", time: 1, block: {})
+            self.dataSource.removeAll()
+            self.timeLineTableView.reloadSections(NSIndexSet.init(index: 1), withRowAnimation: .Fade)
+        }
+    }
+
+    //MARK:tableview的代理方法
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {//section 0 是日历组
+            return 0
+        }else{//数据组
+            return self.dataSource.count
         }
     }
     
-    //MARK:tableview的代理方法
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {//日历组视图
+            //配置日历
+            self.setCalendarWithDate(NSDate())
+            
+            return calendarController.view
+        }else{//统计组视图
+            //总金额
+            var totalMoney:CGFloat = 0.0
+            //项目数
+            var projectNum = [String]()
+            for i in 0..<self.dataSource.count {
+                totalMoney += self.dataSource[i].recordCost
+                if !projectNum.contains(self.dataSource[i].recordEvent) {
+                    projectNum.append(self.dataSource[i].recordEvent)
+                }
+            }
+            self.statisticalView = StatisticalView.init(frame: CGRectMake(0, 0, Utils.screenWidth, 44), projectCount: projectNum.count, money: totalMoney, timeStr: self.dateString)
+            
+            return statisticalView
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("calendarCell") as! TimeLineCalendarCell
-            cell.calendarCallBack = {//日历点击后的回调，返回选中时间(Int)
-                (day,month,year) in
-                self.title = String.init(format: "%d-%02d-%02d", year,month,day)
-                //加载数据
-                self.reloadData(self.title!)
-            }
-            cell.setCalendarView()
+        if indexPath.section == 0 {
+            let cell = UITableViewCell.init(style: .Default, reuseIdentifier: "NoneCell")
             cell.selectionStyle = .None
             return cell
         }else{
@@ -110,15 +142,30 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 300
+        if indexPath.section == 0 {
+            return 0
         }
         let height = self.cellForHeight.heightForCell(self.dataSource[indexPath.row])
         return height
     }
     
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            let tempViewController = UIViewController()
+            let tempCalender = PDCalendarViewController()
+            tempCalender.transferShowDate = NSDate()
+            tempCalender.calendarShow(tempViewController, animated: false, calendarOriginY: 0)
+            tempCalender.selectedCompeletionClourse = { (year,month,day) in
+                
+            }
+            return tempCalender.calendarView.size_height
+        }else{
+            return 44
+        }
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row > 0 {
+        if indexPath.section > 0 {
             //将展开属性设置成跟之前相反
             self.dataSource[indexPath.row].isExpand = !self.dataSource[indexPath.row].isExpand
             //刷新当前展开或收起的cell
@@ -126,10 +173,56 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
+    //删除操作
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            Utils.showJCAlert("删除提示", tips: "是否删除 '" + self.dataSource[indexPath.row].recordEvent + "' 项纪录", complete: {
+                Utils.sharedInstance.showLoadingViewOnView("删除中", parentView: self.view)
+                //调用model的删除方法
+                TimeLineRecord.deleteModel(self.dataSource[indexPath.row]) { [weak self] (error) in
+                    Utils.sharedInstance.hideLoadingView()
+                    if error == nil{
+                        self?.dataSource.removeAtIndex(indexPath.row)
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                        tableView.reloadSections(NSIndexSet.init(index: 1), withRowAnimation: .Automatic)
+                    }else{//删除失败
+                        Utils.showHUDWithMessage(error!.localizedDescription, time: 2, block: {})
+                    }
+                }
+            })
+        }
+    }
+    
+    func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {
+        return "删除"
+    }
+    
+    //MARK:设置日历
+    func setCalendarWithDate(date: NSDate){
+        //设置头视图的frame
+        calendar.transferShowDate = date
+        calendar.calendarShow(calendarController, animated: true, calendarOriginY: 0)
+        calendar.greenCircleDiameter = Utils.scaleFloat(35)
+        calendar.selectedCompeletionClourse = { [weak self] (year,month,day) in
+            let dateStr = String.init(format: "%d-%02d-%02d", year,month,day)
+            if dateStr != self?.dateString {
+                self?.dateString = dateStr
+                //加载数据
+                self?.reloadData(self!.dateString)
+            }
+        }
+        //日历翻页时的回调
+        calendar.monthChange = { [weak self] (date) in
+            self?.titileView.titleLable.text = String.init(format: "%d-%02d", PDCalendarAttribute.year(date), PDCalendarAttribute.month(date))
+            self?.titileView.setNeedsLayout()
+        }
+    }
+    
     //MARK:设置导航栏
     func setNavigation(){
-        //设置标题
-        self.title = self.getCurrentTime()
+        //设置当前日期
+        self.dateString = self.getCurrentTime()
         //设置返回按钮
         let item = UIBarButtonItem.init(title: NSLocalizedString("TimeLine.navigation.back", comment: "返回"), style: .Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = item
@@ -137,6 +230,33 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        let rightBar = UIBarButtonItem.init(customView: rightButton)
         self.navigationItem.rightBarButtonItem = rightBar
         
+        //设置顶部导航栏视图
+        self.navigationItem.titleView = titileView
+        titileView.tapClosure = { [weak self] () in
+            //设置当前年份
+            self?.chooseDateController.year = PDCalendarAttribute.year(NSDate())
+            //设置当前月份
+            self?.chooseDateController.month = PDCalendarAttribute.month(NSDate())
+            //设置位置
+            self?.chooseDateController.bounds = CGRectMake(0, 0, Utils.scaleFloat(300), Utils.scaleFloat(200))
+            self?.chooseDateController.view.frame = CGRectMake(0, 0, Utils.scaleFloat(300), Utils.scaleFloat(200))
+            self?.chooseDatePopView.backView.addSubview(self!.chooseDateController.view)
+            //日期选择回调
+            self?.chooseDateController.chooseDate = { (year,month) in
+                //弹窗关闭
+                self?.chooseDatePopView.dismiss()
+                //日期选择
+                let dateString = String.init(format: "%d-%02d-%02d", year,month,1)
+                let fmt = NSDateFormatter()
+                fmt.dateFormat = "yyyy-MM-dd"
+                let date = fmt.dateFromString(dateString)
+                if date != nil {
+                    self?.calendar.jumpDate = date
+                }
+            }
+            
+            self?.chooseDatePopView.popView()
+        }
     }
     
     //MARK:获取当前时间
@@ -167,14 +287,14 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         case .AddRecord:
             //跳转到添加消费项目界面
             let addVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("addRecord") as! AddRecordViewController
-            addVC.addTimeString = self.title!
+            addVC.addTimeString = self.dateString
             //添加一个回调，如果添加了数据，则刷新当前选中日期的数据
-            addVC.updateTimeLine = {
-                () in
+            addVC.updateTimeLine = { [weak self] () in
                 //初始化选中日期的数据
-                self.reloadData(self.title!)
+                self?.reloadData(self!.dateString)
             }
             self.navigationController?.pushViewController(addVC, animated: true)
+            break
         case .AddEvent:
             //跳转到消费项目列表界面
             self.navigationController?.pushViewController(TimeLineAddEventController(), animated: true)
@@ -186,4 +306,9 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
        
     }
+    
+    deinit{
+        print("TimeLine释放")
+    }
+    
 }

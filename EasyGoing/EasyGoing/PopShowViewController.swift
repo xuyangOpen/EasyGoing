@@ -43,7 +43,7 @@ class PopShowViewController: UIViewController,UITableViewDataSource,UITableViewD
         tableView.backgroundColor = Utils.bgColor
         //菜单名
         optionArray.append("添加消费记录")
-        optionArray.append("添加消费项目")
+        optionArray.append("管理消费项目")
         optionArray.append("消费数据统计")
         //菜单图片
         optionImageArray.append("recordPlus")

@@ -23,4 +23,12 @@
 #import "MusicBarAnimationController.h"
 #import "WaterWaveViewController.h"
 
+#import "FeHourGlass.h"
+
+#import "RandomString.h"        //生成随机的uuid字符串
+
+#import "PieChartViewController.h"  //饼状图
+#import "BarChartController.h"      //柱形图
+@import Charts;                     //导入Charts module ，供OC使用
+@import Masonry;
 #endif /* ObjectC_Bridging_Header_h */
