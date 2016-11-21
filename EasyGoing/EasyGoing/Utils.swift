@@ -298,4 +298,5 @@ class Utils: NSObject{
     //MARK:TimeLine
     /**消费项目类别的数据源*/
     static var eventDataSource:[TimeLineEvent]?
+
 }

@@ -12,6 +12,8 @@
 
 //视图位置
 @property (nonatomic, assign)CGRect showFrame;
+//动画
+@property (nonatomic, assign)BOOL animation;
 //数据源
 @property (nonatomic, strong)NSDictionary<NSNumber *,NSNumber *> *costDictionary;
 //Y轴最大值

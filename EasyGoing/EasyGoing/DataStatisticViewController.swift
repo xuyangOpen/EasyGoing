@@ -9,6 +9,17 @@
 import UIKit
 import AVOSCloud
 
+
+enum PanelSelectorMode {
+    case YearMode
+    case MonthMode
+}
+
+enum DataType {
+    case ProjectType
+    case MoneyType
+}
+
 //MARK:数据统计控制器视图
 class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
@@ -38,6 +49,37 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     var barDataSource = [TimeLineRecord]()
     
     //=============================================================
+    //消费金额统计年份
+    var dataMoneyYear = PDCalendarAttribute.year(NSDate())
+    //当前统计类型  默认是消费类型
+    var dataType = DataType.ProjectType{
+        didSet{
+            if self.dataType == .ProjectType {//消费项目统计
+                if self.selectorMode == .YearMode {
+                    self.configYearSelector()
+                }else{
+                    self.configMonthSelector()
+                }
+                if self.monthButton.superview == nil {//添加月份选择按钮
+                    self.panelView.addSubview(self.monthButton)
+                }
+                if self.selectedMonth == "0" {//全年
+                    self.informationLable.text = "当前选择：\(self.selectedYear)年"
+                }else{//年月
+                    self.informationLable.text = "当前选择：\(self.selectedYear)年\(self.selectedMonth)月"
+                }
+            }else {//消费金额年统计
+                if self.selectorMode == .MonthMode {//如果是月份选择器，则换成年份选择器
+                    self.configYearSelector()
+                }
+                if self.monthButton.superview != nil{//移除月份选择按钮
+                    self.monthButton.removeFromSuperview()
+                }
+                self.informationLable.text = "当前选择：\(self.dataMoneyYear)年"
+            }
+        }
+    }
+    
     //底部按钮
     let triggerButton = UIButton()
     //底部面板
@@ -62,9 +104,10 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     //选择年份的UICollectionView
     var yearCollectionView:UICollectionView?
     let flowLayout = UICollectionViewFlowLayout()
-    var yearArray = [Int]()         //年份数组
-    let monthParentView = UIScrollView()    //月份选择按钮的父视图
-    var selectedYear = PDCalendarAttribute.year(NSDate())   //当前选中的年份
+    var yearOrMonthArray = [String]()          //年份或者月份数组
+    var selectorMode = PanelSelectorMode.YearMode     //选择器模式  默认是年份选择器
+    var selectedYear = String(PDCalendarAttribute.year(NSDate()))   //当前选中的年份
+    var selectedMonth = String(PDCalendarAttribute.month(NSDate()))   //当前选中的月份
     
     //面板的年份和月份按钮以及开关动画的switch
     let informationLable = UILabel()
@@ -72,6 +115,7 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     let monthButton = UIButton()
     let switchLabel = UILabel()
     let animationSwitch = UISwitch()
+    let animationKey = "tl_sta_ani"
     
     //MARK:ViewDidLoad
     override func viewDidLoad() {
@@ -174,7 +218,7 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
                 }
                 //如果数据长度为0，则提示无数据
                 if self.barDataSource.count == 0{
-                    self.barTitleLabel.text = "\(self.barTitleLabel.text)无数据"
+                    self.barTitleLabel.text = "\(self.barTitleLabel.text!)无数据"
                 }
                 //配置数据
                 self.configBarChartData(PDCalendarAttribute.year(queryDate))
@@ -194,6 +238,7 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         self.containerView.pagingEnabled = true
         self.containerView.scrollEnabled = false
         self.containerView.delegate = self
+        self.containerView.tag = 1024
         self.containerView.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
         self.containerView.autoresizingMask = .FlexibleHeight
         self.view.addSubview(self.containerView)
@@ -227,7 +272,6 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         self.barTitleLabel.textAlignment = .Center
         self.barTitleLabel.textColor = UIColor.orangeColor()
         self.barTitleLabel.frame = CGRectMake(0, 105 + Utils.screenWidth, Utils.screenWidth, 20)
-    
     }
     
     //MARK:配置饼状图数据
@@ -249,6 +293,7 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         //配置完数据之后，更新数据
         self.pieChart.categoryDictionary = self.pieCategoryDictionary
         self.pieChart.costDictionary = self.pieCostDictionary
+        self.pieChart.animation = (AVUser.currentUser()?.objectForKey(animationKey) as! String) == "1" ? true : false
         self.pieChart.updateData()
     }
     
@@ -286,30 +331,38 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
                 }
             }
             self.barChart.maxY = maxY
-            self.barChart.costDictionary = self.barCostDictionary
-            self.barChart.updateData()
         }
+        self.barChart.costDictionary = self.barCostDictionary
+        self.barChart.animation = (AVUser.currentUser()?.objectForKey(animationKey) as! String) == "1" ? true : false
+        self.barChart.updateData()
     }
     
     //MARK:
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView.contentOffset.x == 0 {
-            self.pieChart.updateData()
-        }else if scrollView.contentOffset.x == Utils.screenWidth{
-            if self.barView.subviews.count == 0 {
-                self.barChart.showFrame = CGRectMake(Utils.screenWidth, 0, Utils.screenWidth, Utils.screenWidth)
-                //第一次加载页面时，先获取网络数据
-                self.getBarNetData(NSDate())
-                self.barChart.loadBarChartView()
-                self.barView.addSubview(self.barChart.view)
-            }else{
-                self.barChart.updateData()
+        if scrollView.tag == 1024 {//1024的tag值代表的是整个视图的scrollView
+            if scrollView.contentOffset.x == 0 {
+                self.dataType = .ProjectType    //统计类型
+                self.pieChart.updateData()
+            }else if scrollView.contentOffset.x == Utils.screenWidth{
+                self.dataType = .MoneyType      //统计类型
+                if self.barView.subviews.count == 0 {
+                    self.barChart.showFrame = CGRectMake(Utils.screenWidth, 0, Utils.screenWidth, Utils.screenWidth)
+                    //第一次加载页面时，先获取网络数据
+                    self.getBarNetData(NSDate())
+                    self.barChart.loadBarChartView()
+                    self.barView.addSubview(self.barChart.view)
+                }else{
+                    self.barChart.updateData()
+                }
             }
         }
     }
     
     //MARK:顶部segment点击时，改变视图
     func changeView(sender:UISegmentedControl){
+        if self.isShowPanel {
+            self.showYearMenu()
+        }
         self.containerView.setContentOffset(CGPointMake(CGFloat(sender.selectedSegmentIndex) * Utils.screenWidth, 0), animated: true)
     }
     
@@ -338,6 +391,8 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         self.yearButton.titleLabel?.font = UIFont.systemFontOfSize(16)
         self.yearButton.backgroundColor = UIColor.whiteColor()
         self.yearButton.frame = CGRectMake(Utils.scaleFloat(20), Utils.scaleFloat(45), Utils.scaleFloat(80), Utils.scaleFloat(40))
+        self.yearButton.tag = 1
+        self.yearButton.addTarget(self, action: #selector(yearOrMonthClick(_:)), forControlEvents: .TouchUpInside)
         self.panelView.addSubview(self.yearButton)
         //月份按钮
         self.monthButton.setTitle("月份", forState: .Normal)
@@ -345,18 +400,24 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         self.monthButton.titleLabel?.font = UIFont.systemFontOfSize(16)
         self.monthButton.backgroundColor = panelColor
         self.monthButton.frame = CGRectMake(CGRectGetMaxX(self.yearButton.frame), CGRectGetMinY(self.yearButton.frame), Utils.scaleFloat(80), Utils.scaleFloat(40))
+        self.monthButton.tag = 2
+        self.monthButton.addTarget(self, action: #selector(yearOrMonthClick(_:)), forControlEvents: .TouchUpInside)
         self.panelView.addSubview(self.monthButton)
         //动画开关
+        self.animationSwitch.frame = CGRectMake(Utils.screenWidth-Utils.scaleFloat(80), CGRectGetMinY(self.yearButton.frame), Utils.scaleFloat(100), Utils.scaleFloat(40))
+        self.animationSwitch.on = (AVUser.currentUser()?.objectForKey(animationKey) as! String) == "1" ? true : false
+        self.animationSwitch.addTarget(self, action: #selector(animationSwitch(_:)), forControlEvents: .ValueChanged)
+        self.panelView.addSubview(self.animationSwitch)
         
+        self.switchLabel.text = "动画开关"
+        self.switchLabel.font = UIFont.systemFontOfSize(16)
+        self.switchLabel.textColor = UIColor.blackColor()
+        let switchLabelLength = Utils.widthForText("动画开关", size: CGSizeMake(Utils.screenWidth, 20), font: UIFont.systemFontOfSize(16))
+        self.switchLabel.frame = CGRectMake(CGRectGetMinX(self.animationSwitch.frame) - switchLabelLength - 10, CGRectGetMinY(self.yearButton.frame), switchLabelLength, 20)
+        self.switchLabel.center.y = self.animationSwitch.center.y
+        self.panelView.addSubview(self.switchLabel)
         
-        //月份选择的父视图
-        monthParentView.frame = CGRectMake(0, CGRectGetMaxY(self.yearButton.frame), Utils.screenWidth, Utils.scaleFloat(150) - CGRectGetMaxY(self.yearButton.frame))
-        //"年份" + "全年" + 12个月份按钮
-        monthParentView.contentSize = CGSizeMake(Utils.screenWidth/5.0*13, 50)
-        monthParentView.backgroundColor = UIColor.whiteColor()
-        monthParentView.showsHorizontalScrollIndicator = false
-//        self.panelView.addSubview(monthParentView)
-        //年份选择器
+        //年份或者月份选择器  默认是年份
         flowLayout.itemSize = CGSizeMake(Utils.screenWidth/5.0, 50)
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 0
@@ -374,7 +435,7 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     
         //年份数据
         for i in 1900...2100 {
-            self.yearArray.append(i)
+            self.yearOrMonthArray.append("\(i)")
         }
         //滑动到当前年份
         let offsetX = (PDCalendarAttribute.year(NSDate()) - 1900)/5
@@ -385,10 +446,6 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     func showYearMenu(){
         self.isShowPanel = !self.isShowPanel
         //如果是展开，则滑动到当前年份
-        if self.isShowPanel {
-            let offsetX = (PDCalendarAttribute.year(NSDate()) - 1900)/5
-            self.yearCollectionView?.contentOffset = CGPointMake( CGFloat(offsetX) * Utils.screenWidth, 0)
-        }
         UIView.animateWithDuration(animationDuration) {
             //面板位置
             let panelOriginY = self.isShowPanel ? (Utils.screenHeight-self.panelHeight) : Utils.screenHeight
@@ -402,64 +459,135 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     
     //MARK:UICollectionView代理方法
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.yearArray.count
+        return self.yearOrMonthArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("yearCell", forIndexPath: indexPath) as! YearCollectionCell
     
-        cell.yearLabel.text = "\(yearArray[indexPath.item])"
-        if yearArray[indexPath.item] == PDCalendarAttribute.year(NSDate()) {
-            cell.isCurrentTime = true
-        }else{
-            cell.isCurrentTime = false
-        }
+        cell.yearLabel.text = "\(yearOrMonthArray[indexPath.item])"
+//        if self.selectorMode == .YearMode {//年份模式
+//            if yearOrMonthArray[indexPath.item] == self.selectedYear {
+//                cell.isCurrentTime = true
+//            }else{
+//                cell.isCurrentTime = false
+//            }
+//        }else {//月份模式
+//            if yearOrMonthArray[indexPath.item] == self.selectedMonth {
+//                cell.isCurrentTime = true
+//            }else{
+//                cell.isCurrentTime = false
+//            }
+//        }
+        cell.isCurrentTime = false
         cell.setAttribute()
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        UIView.animateWithDuration(animationDuration) { 
-            self.panelView.frame = CGRectMake(0, Utils.screenHeight-150, Utils.screenWidth, 150)
-            self.triggerButton.frame = CGRectMake(Utils.screenWidth-30, Utils.screenHeight-180, 30, 30)
-            self.selectedYear = self.yearArray[indexPath.item]
-            self.monthParentView.setContentOffset(CGPointZero, animated: true)
-            //月份选择按钮
-            for i in 0..<13{
-                let btn = UIButton.init(frame: CGRectMake(CGFloat(i)*Utils.screenWidth/5.0, 0, Utils.screenWidth/5.0, 50))
-                if i == 0{
-                    btn.setTitle("全年", forState: .Normal)
-                }
-                else{
-                    btn.setTitle("\(i)", forState: .Normal)
-                }
-                btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
-                btn.titleLabel?.font = UIFont.systemFontOfSize(16)
-                btn.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
-                btn.layer.cornerRadius = 15
-                btn.layer.masksToBounds = true
-                btn.tag = i
-                btn.addTarget(self, action: #selector(self.chooseDateComplete(_:)), forControlEvents: .TouchUpInside)
-                self.monthParentView.addSubview(btn)
+        if self.dataType == .ProjectType {//消费项目统计
+            if self.selectorMode == .YearMode{//年份模式
+                self.selectorMode = .MonthMode//改变模式
+                //选中年份
+                self.selectedYear = self.yearOrMonthArray[indexPath.item]
+                //月份选择器配置
+                self.configMonthSelector()
+            }else{//月份模式
+                self.chooseDateComplete(indexPath.item)
             }
+        }else{//消费金额统计
+            let fmt = NSDateFormatter()
+            fmt.dateFormat = "yyyy-MM-dd"
+            let queryDate = String.init(format: "%@-01-01", self.yearOrMonthArray[indexPath.item])
+            self.getBarNetData(fmt.dateFromString(queryDate)!)
         }
     }
     
     //MARK:日期选择完毕
-    func chooseDateComplete(btn: UIButton){
-//        self.showYearMenu()             //关闭底部菜单
+    func chooseDateComplete(index: Int){
         var isByMonth = true            //是否按月份查询
         var queryDateString = ""        //字符时间
-        if btn.tag > 0 {//查询某月
-            queryDateString = String.init(format: "%d-%02d-01", selectedYear,btn.tag)
+        //当前选择月份
+        self.selectedMonth = "\(index)"
+        if index > 0 {//查询某月
+            queryDateString = String.init(format: "%@-%02d-01", selectedYear,index)
+            //当前选择label
+            self.informationLable.text = String.init(format: "当前选择：%@年%02d月",selectedYear, index)
         }else{//查询全年
             isByMonth = false
-            queryDateString = String.init(format: "%d-01-01", selectedYear)
+            queryDateString = String.init(format: "%@-01-01", selectedYear)
+            //当前选择label
+            self.informationLable.text = String.init(format: "当前选择：%@年",selectedYear)
         }
         let fmt = NSDateFormatter()
         fmt.dateFormat = "yyyy-MM-dd"
         //数据查询
         self.getPieNetData(fmt.dateFromString(queryDateString)!, isByMonth: isByMonth)
+    }
+    
+    //MARK:年份或者月份按钮点击
+    func yearOrMonthClick(btn: UIButton){
+        if btn.tag == 1 {//年份按钮点击
+            if self.selectorMode == .MonthMode {
+                //当前模式为月份选择器时，点击才有作用
+                self.selectorMode = .YearMode
+                //改变为年份选择器
+                self.configYearSelector()
+            }
+        }else if btn.tag == 2{//月份按钮点击
+            if self.selectorMode == .YearMode {
+                //当前模式为年份选择器时，点击才有作用
+                //按钮样式
+                self.yearButton.backgroundColor = self.panelColor
+                self.monthButton.backgroundColor = UIColor.whiteColor()
+                self.collectionView(self.yearCollectionView!, didSelectItemAtIndexPath: NSIndexPath.init(forRow: PDCalendarAttribute.year(NSDate())-1900, inSection: 0))
+            }
+        }
+    }
+    
+    //MARK:switch动画开关
+    func animationSwitch(sender: UISwitch){
+        self.pieChart.animation = sender.on
+        self.barChart.animation = sender.on
+        let animationString = sender.on ? "1" : "0"
+        //设置全局属性
+        AVUser.currentUser()?.setObject(animationString, forKey: animationKey)
+        AVUser.currentUser()?.saveInBackground()
+    }
+    
+    //MARK:年份选择器配置
+    func configYearSelector(){
+        //按钮样式
+        self.yearButton.backgroundColor = UIColor.whiteColor()
+        self.monthButton.backgroundColor = self.panelColor
+        self.yearOrMonthArray.removeAll()
+        //年份数据
+        for i in 1900...2100 {
+            self.yearOrMonthArray.append("\(i)")
+        }
+        self.yearCollectionView?.reloadData()
+        //滑动到当前年份
+        let offsetX = (PDCalendarAttribute.year(NSDate()) - 1900)/5
+        self.yearCollectionView?.contentOffset = CGPointMake( CGFloat(offsetX) * Utils.screenWidth, 0)
+    }
+    
+    //MARK:月份选择器配置
+    func configMonthSelector(){
+        //按钮样式
+        self.yearButton.backgroundColor = self.panelColor
+        self.monthButton.backgroundColor = UIColor.whiteColor()
+        self.informationLable.text = "当前选择：\(self.selectedYear)年"
+        self.yearOrMonthArray.removeAll()
+        self.yearOrMonthArray.append("全年")
+        for i in 0..<12{
+            self.yearOrMonthArray.append("\(i+1)")
+        }
+        self.yearCollectionView!.reloadData()
+        self.yearCollectionView!.contentOffset = CGPointZero
+    }
+    
+    deinit{
+        print("数据统计页面释放了")
     }
     
     override func didReceiveMemoryWarning() {

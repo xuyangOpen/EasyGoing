@@ -39,7 +39,7 @@
 //    self.pieChartView.frame = self.showFrame;
     [self.pieChartView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(self.showFrame.size.width, self.showFrame.size.height));
-        make.top.mas_equalTo(self.view).offset(100);
+        make.top.mas_equalTo(self.view).offset((100/414.0) * KScreenWidth);
         make.left.mas_equalTo(self.view);
     }];
     
@@ -86,8 +86,12 @@
     //为饼状图提供数据
     self.data = [self setData];
     self.pieChartView.data = self.data;
-    //设置动画效果
-    [self.pieChartView animateWithXAxisDuration:1.0f easingOption:ChartEasingOptionEaseOutExpo];
+    
+    if (self.animation) {
+        //设置动画效果
+        [self.pieChartView animateWithXAxisDuration:1.0f easingOption:ChartEasingOptionEaseOutExpo];
+    }
+    
 }
 
 
@@ -106,8 +110,11 @@
         self.pieChartView.centerAttributedText = centerText;
     }
     
-    //设置动画效果
-    [self.pieChartView animateWithXAxisDuration:1.0f easingOption:ChartEasingOptionEaseOutExpo];
+    if (self.animation) {
+        //设置动画效果
+        [self.pieChartView animateWithXAxisDuration:1.0f easingOption:ChartEasingOptionEaseOutExpo];
+    }
+    
 }
 
 - (PieChartData *)setData{

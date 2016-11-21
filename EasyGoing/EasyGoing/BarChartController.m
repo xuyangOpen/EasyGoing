@@ -37,7 +37,7 @@
 //    self.barChartView.frame = self.showFrame;
     [self.barChartView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(self.showFrame.size.width, self.showFrame.size.height));
-        make.top.mas_equalTo(self.view).offset(100);
+        make.top.mas_equalTo(self.view).offset((100/414.0) * KScreenWidth);
         make.left.mas_equalTo(self.view);
     }];
     
@@ -112,8 +112,11 @@
     //为柱形图提供数据
     self.barChartView.data = self.data;
     
-    //设置动画效果，可以设置X轴和Y轴的动画效果
-    [self.barChartView animateWithYAxisDuration:1.0f];
+    if (self.animation) {
+        //设置动画效果，可以设置X轴和Y轴的动画效果
+        [self.barChartView animateWithYAxisDuration:1.0f];
+    }
+    
 }
 
 //为柱形图设置数据
@@ -166,8 +169,11 @@
     self.barChartView.leftAxis.axisMaxValue = self.maxY + self.maxY/5.0;
     
     [self.barChartView notifyDataSetChanged];
-    //设置动画效果，可以设置X轴和Y轴的动画效果
-    [self.barChartView animateWithYAxisDuration:1.0f];
+    
+    if (self.animation) {
+        //设置动画效果，可以设置X轴和Y轴的动画效果
+        [self.barChartView animateWithYAxisDuration:1.0f];
+    }
 }
 
 

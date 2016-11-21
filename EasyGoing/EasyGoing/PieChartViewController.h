@@ -14,6 +14,9 @@
 @property (nonatomic, assign)CGRect showFrame;
 //视图中间的日期
 @property (nonatomic) NSString *centerDateString;
+//动画
+@property (nonatomic, assign)BOOL animation;
+
 //数据源
 @property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *categoryDictionary;
 @property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *costDictionary;

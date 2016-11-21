@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AVOSCloud.setApplicationId("Ib3GGpkADGmJzJO6hp0xTb6F-gzGzoHsz", clientKey: "k7rHYRTrnMG0AO07EO97qYzI")
         
         //判断是否登录
-//        AVUser.logOut()
+        AVUser.logOut()
         let user = AVUser.currentUser()
         if user == nil {//没有登录的情况下，跳转到登录界面
             let loginNav = UINavigationController.init(rootViewController: LoginViewController())
