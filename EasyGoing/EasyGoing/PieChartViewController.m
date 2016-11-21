@@ -64,7 +64,7 @@
         //普通文本
         //        self.pieChartView.centerText = @"饼状图";//中间文字
         //富文本
-        NSMutableAttributedString *centerText = [[NSMutableAttributedString alloc] initWithString:@"消费项目"];
+        NSMutableAttributedString *centerText = [[NSMutableAttributedString alloc] initWithString:self.centerDateString];
         [centerText setAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:16],
                                     NSForegroundColorAttributeName: [UIColor orangeColor]}
                             range:NSMakeRange(0, centerText.length)];
@@ -95,6 +95,17 @@
     //为饼状图提供数据
     self.data = [self setData];
     self.pieChartView.data = self.data;
+    //饼状图中间描述
+    if (self.pieChartView.isDrawHoleEnabled == YES) {
+        self.pieChartView.drawCenterTextEnabled = YES;//是否显示中间文字
+        //富文本
+        NSMutableAttributedString *centerText = [[NSMutableAttributedString alloc] initWithString:self.centerDateString];
+        [centerText setAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:16],
+                                    NSForegroundColorAttributeName: [UIColor orangeColor]}
+                            range:NSMakeRange(0, centerText.length)];
+        self.pieChartView.centerAttributedText = centerText;
+    }
+    
     //设置动画效果
     [self.pieChartView animateWithXAxisDuration:1.0f easingOption:ChartEasingOptionEaseOutExpo];
 }

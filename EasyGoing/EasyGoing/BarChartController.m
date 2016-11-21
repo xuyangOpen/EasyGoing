@@ -73,7 +73,11 @@
     leftAxis.showOnlyMinMaxEnabled = NO;//是否只显示最大值和最小值
     leftAxis.axisMinValue = 0;//设置Y轴的最小值
     leftAxis.startAtZeroEnabled = YES;//从0开始绘制
-    leftAxis.axisMaxValue = 105;//设置Y轴的最大值
+    if (self.maxY <= 0) {
+        leftAxis.axisMaxValue = 100;//设置Y轴的最大值
+    }else{
+        leftAxis.axisMaxValue = self.maxY;//设置Y轴的最大值
+    }
     leftAxis.inverted = NO;//是否将Y轴进行上下翻转
     leftAxis.axisLineWidth = 0.5;//Y轴线宽
     leftAxis.axisLineColor = [UIColor blackColor];//Y轴颜色
@@ -115,8 +119,7 @@
 //为柱形图设置数据
 - (BarChartData *)setData{
     
-    int xVals_count = 12;//X轴上要显示多少条数据
-    double maxYVal = 100;//Y轴的最大值
+    int xVals_count = (int)self.costDictionary.count;//X轴上要显示多少条数据
     
     //X轴上面需要显示的数据
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
@@ -127,8 +130,7 @@
     //对应Y轴上面需要显示的数据
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     for (int i = 0; i < xVals_count; i++) {
-        double mult = maxYVal + 1;
-        double val = (double)(arc4random_uniform(mult));
+        double val = [self.costDictionary[[[NSNumber alloc] initWithInt:i]] doubleValue];
         BarChartDataEntry *entry = [[BarChartDataEntry alloc] initWithValue:val xIndex:i];
         [yVals addObject:entry];
     }
@@ -137,8 +139,8 @@
     BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:nil];
     set1.barSpace = 0.2;//柱形之间的间隙占整个柱形(柱形+间隙)的比例
     set1.drawValuesEnabled = YES;//是否在柱形图上面显示数值
-    set1.highlightEnabled = NO;//点击选中柱形图是否有高亮效果，（双击空白处取消选中）
-    [set1 setColors:ChartColorTemplates.material];//设置柱形图颜色
+    set1.highlightEnabled = true;//点击选中柱形图是否有高亮效果，（双击空白处取消选中）
+    [set1 setColors:ChartColorTemplates.colorful];//设置柱形图颜色
     //将BarChartDataSet对象放入数组中
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
     [dataSets addObject:set1];
@@ -160,6 +162,9 @@
     //数据改变时，刷新数据
     self.data = [self setData];
     self.barChartView.data = self.data;
+    //最大值 = 当前最大值 + 最大值的五分之一
+    self.barChartView.leftAxis.axisMaxValue = self.maxY + self.maxY/5.0;
+    
     [self.barChartView notifyDataSetChanged];
     //设置动画效果，可以设置X轴和Y轴的动画效果
     [self.barChartView animateWithYAxisDuration:1.0f];

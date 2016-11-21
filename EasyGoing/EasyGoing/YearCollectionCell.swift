@@ -31,9 +31,9 @@ class YearCollectionCell: UICollectionViewCell {
         }
         yearLabel.font = UIFont.systemFontOfSize(16)
         yearLabel.textAlignment = .Center
-        yearLabel.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
-        yearLabel.layer.cornerRadius = 15
-        yearLabel.layer.masksToBounds = true
+//        yearLabel.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
+//        yearLabel.layer.cornerRadius = 15
+//        yearLabel.layer.masksToBounds = true
         self.yearLabel.snp_makeConstraints(closure: { (make) in
             make.top.equalToSuperview()
             make.left.equalToSuperview()

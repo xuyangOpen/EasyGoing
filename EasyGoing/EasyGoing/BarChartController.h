@@ -13,8 +13,9 @@
 //视图位置
 @property (nonatomic, assign)CGRect showFrame;
 //数据源
-@property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *categoryDictionary;
-@property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *costDictionary;
+@property (nonatomic, strong)NSDictionary<NSNumber *,NSNumber *> *costDictionary;
+//Y轴最大值
+@property (nonatomic, assign)CGFloat maxY;
 
 //更新视图
 - (void)loadBarChartView;

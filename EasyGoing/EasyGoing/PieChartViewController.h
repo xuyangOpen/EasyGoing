@@ -12,6 +12,8 @@
 
 //视图位置
 @property (nonatomic, assign)CGRect showFrame;
+//视图中间的日期
+@property (nonatomic) NSString *centerDateString;
 //数据源
 @property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *categoryDictionary;
 @property (nonatomic, strong)NSDictionary<NSString *,NSNumber *> *costDictionary;
