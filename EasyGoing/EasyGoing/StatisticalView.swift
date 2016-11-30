@@ -19,15 +19,23 @@ class StatisticalView: UIScrollView,UIScrollViewDelegate {
     let moneyImage = UIImageView()
     let moneyLabel = UILabel()
     
+    let size = CGSizeMake(CGFloat.max, 20)
+    
     //最大宽度
     var maxWidth:CGFloat = 0.0
     
-    convenience init(frame: CGRect, projectCount: Int, money: CGFloat, timeStr: String){
+    //是否需要顶部的分割线
+    var isNeedLine = true
+    
+    //TimeLineController页面调用
+    convenience init(frame: CGRect, projectCount: String, money: CGFloat, timeStr: String, isNeedLine: Bool){
         self.init(frame: frame)
-        
-        self.projectLabel.text = "消费项目：\(projectCount)"
+
+        self.backgroundColor = UIColor.whiteColor()
+        self.projectLabel.text = projectCount
         self.moneyLabel.text = "金额：\(money)"
         self.timeLabel.text = timeStr
+        self.isNeedLine = isNeedLine
         
         self.layoutViews()
         self.calculateWidth()
@@ -50,18 +58,29 @@ class StatisticalView: UIScrollView,UIScrollViewDelegate {
         self.addSubview(moneyImage)
         self.addSubview(moneyLabel)
         
-        line.backgroundColor = Utils.bgColor
-        line.frame = CGRectMake(0, 0, self.bounds.width, 1)
+        if isNeedLine {
+            line.backgroundColor = Utils.bgColor
+            line.frame = CGRectMake(0, 0, self.bounds.width, 1)
+        }
         
-        timeImage.image = UIImage.init(named: "time-icon")
+        if timeLabel.text!.containsString("总记录") {
+            timeImage.image = UIImage.init(named: "number")
+        }else{
+            timeImage.image = UIImage.init(named: "time-icon")
+        }
+        
         timeImage.frame = CGRectMake(20, (44-20)/2.0, 20, 20)
         
         timeLabel.font = UIFont.systemFontOfSize(16)
-        let size = CGSizeMake(CGFloat.max, 20)
         timeLabel.frame = CGRectMake(CGRectGetMaxX(timeImage.frame)+5, 0, Utils.widthForText(timeLabel.text!, size: size, font: UIFont.systemFontOfSize(16)), 18)
         timeLabel.center.y = timeImage.center.y
         
-        projectImage.image = UIImage.init(named: "project-icon")
+        if projectLabel.text!.containsString("总记录") {
+            projectImage.image = UIImage.init(named: "number")
+        }else{
+            projectImage.image = UIImage.init(named: "project-icon")
+        }
+        
         projectImage.frame = CGRectMake(CGRectGetMaxX(timeLabel.frame)+20, 0, 20, 20)
         projectImage.center.y = timeLabel.center.y
         
@@ -98,6 +117,5 @@ class StatisticalView: UIScrollView,UIScrollViewDelegate {
         //最大宽度 + 预留20
         self.contentSize = CGSizeMake(maxWidth + 20, 0)
     }
-
     
 }

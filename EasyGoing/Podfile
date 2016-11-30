@@ -18,8 +18,7 @@ pod 'pop'
 pod 'IQKeyboardManager'
 pod 'JCAlertView'               #TimeLine模块-消费项目弹出视图
 pod 'Masonry'
-#pod 'Charts', '~> 2.3.1'
-#pod 'LeanCloudSocial'           #leanCloud登录模块
+pod 'BaiduMapKit' #百度地图SDK
 
 end
 

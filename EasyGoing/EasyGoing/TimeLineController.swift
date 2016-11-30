@@ -39,6 +39,7 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
     }
     
     override func viewDidLoad() {
@@ -122,7 +123,7 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     projectNum.append(self.dataSource[i].recordEvent)
                 }
             }
-            self.statisticalView = StatisticalView.init(frame: CGRectMake(0, 0, Utils.screenWidth, 44), projectCount: projectNum.count, money: totalMoney, timeStr: self.dateString)
+            self.statisticalView = StatisticalView.init(frame: CGRectMake(0, 0, Utils.screenWidth, 44), projectCount: "消费项目：\(projectNum.count)", money: totalMoney, timeStr: self.dateString, isNeedLine: false)
             
             return statisticalView
         }
@@ -135,7 +136,7 @@ class TimeLineController: UIViewController,UITableViewDelegate,UITableViewDataSo
             return cell
         }else{
             let cell = tableView.dequeueReusableCellWithIdentifier("timeLineDataCell") as! TimeLineNormalCell
-            cell.setModel(self.dataSource[indexPath.row])
+            cell.setModel(self.dataSource[indexPath.row],isShowTime: false)
             cell.selectionStyle = .None
             return cell
         }

@@ -27,6 +27,7 @@ class TimeLineRecord: NSObject {
     var recordCost:CGFloat = 0.0            //消费金额
     var recordMark = ""                     //备注
     
+    var createdAt = ""                      //创建时间
     
     //将AVObject类转换成TimeLineRecord类
     class func initRecordWithAVObject(avObject:AVObject) -> TimeLineRecord{
@@ -48,6 +49,10 @@ class TimeLineRecord: NSObject {
         model.recordTime = avObject.objectForKey("recordTime") as! String
         model.recordMark = avObject.objectForKey("recordMark") as! String
         
+        //创建时间
+        let createdDate = avObject.objectForKey("createdAt") as! NSDate
+        model.createdAt = String(createdDate.timeIntervalSince1970 * 1000)
+        
         return model
     }
     
@@ -62,4 +67,5 @@ class TimeLineRecord: NSObject {
             }
         }
     }
+    
 }

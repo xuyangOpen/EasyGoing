@@ -21,7 +21,7 @@ enum DataType {
 }
 
 //MARK:数据统计控制器视图
-class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,PieChartDelegate,BarChartDelegate {
 
     //分段控制器
     let segmentView = UISegmentedControl.init(items: ["项目","金额"])
@@ -47,7 +47,10 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     var dataSource = [TimeLineRecord]()
     //柱状图数据源
     var barDataSource = [TimeLineRecord]()
-    
+    //消费项目详情页面
+    let detailVC = RecordDetailController()
+    //年消费统计详情页面
+    let yearDetailVC = RecordDetailController()
     //=============================================================
     //消费金额统计年份
     var dataMoneyYear = PDCalendarAttribute.year(NSDate())
@@ -106,8 +109,11 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
     let flowLayout = UICollectionViewFlowLayout()
     var yearOrMonthArray = [String]()          //年份或者月份数组
     var selectorMode = PanelSelectorMode.YearMode     //选择器模式  默认是年份选择器
+    //消费项目
     var selectedYear = String(PDCalendarAttribute.year(NSDate()))   //当前选中的年份
     var selectedMonth = String(PDCalendarAttribute.month(NSDate()))   //当前选中的月份
+    //年统计
+    var year = String(PDCalendarAttribute.year(NSDate()))
     
     //面板的年份和月份按钮以及开关动画的switch
     let informationLable = UILabel()
@@ -250,14 +256,13 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         //饼视图设置
         self.pieView.frame = CGRectMake(0, 0, Utils.screenWidth, Utils.screenHeight)
         self.pieView.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
-        self.pieView.autoresizingMask = .FlexibleHeight
         self.containerView.addSubview(self.pieView)
         
         //饼状图
-        self.pieChart.showFrame = CGRectMake(0, 0, Utils.screenWidth, Utils.screenWidth)
         self.pieChart.categoryDictionary = self.pieCategoryDictionary
         self.pieChart.costDictionary = self.pieCostDictionary
         self.pieChart.centerDateString = "查询中..."
+        self.pieChart.view.frame = CGRectMake(0, Utils.scaleFloat(100), Utils.screenWidth, Utils.screenWidth)
         self.pieChart.loadPieChartView()
         self.pieView.addSubview(self.pieChart.view)
         
@@ -266,12 +271,14 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         self.barView.backgroundColor = UIColor.init(red: 230/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
         self.containerView.addSubview(self.barView)
         //柱形图的标题label
+        self.barChart.view.frame = CGRectMake(0, Utils.scaleFloat(100), Utils.screenWidth, Utils.screenWidth)
+        self.barChart.delegate = self
         self.barChart.view.addSubview(self.barTitleLabel)
         self.barTitleLabel.font = UIFont.systemFontOfSize(16)
         self.barTitleLabel.text = "\(PDCalendarAttribute.year(NSDate()))年"
         self.barTitleLabel.textAlignment = .Center
         self.barTitleLabel.textColor = UIColor.orangeColor()
-        self.barTitleLabel.frame = CGRectMake(0, 105 + Utils.screenWidth, Utils.screenWidth, 20)
+        self.barTitleLabel.frame = CGRectMake(0, Utils.screenWidth + 5, Utils.screenWidth, 20)
     }
     
     //MARK:配置饼状图数据
@@ -292,9 +299,81 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
         }
         //配置完数据之后，更新数据
         self.pieChart.categoryDictionary = self.pieCategoryDictionary
+        self.pieChart.categoryDictionary = self.pieCategoryDictionary
         self.pieChart.costDictionary = self.pieCostDictionary
         self.pieChart.animation = (AVUser.currentUser()?.objectForKey(animationKey) as! String) == "1" ? true : false
+        self.pieChart.delegate = self
         self.pieChart.updateData()
+    }
+    
+    //MARK:piechart代理方法
+    func showEventAtIndex(index: NSNumber!) {
+        let keys = Array(self.pieCategoryDictionary.keys)
+//        print("选中消费项目是 = \(keys[index.integerValue])")
+        var showEventArray = [TimeLineRecord]()
+        for record in self.dataSource {
+            if record.recordEvent.containsString(keys[index.integerValue]) {
+                showEventArray.append(record)
+            }
+            //默认将分组全部关闭
+            record.isExpand = false
+        }
+        //将piechart位置移动，动画时间和detailVC的动画时间一致
+        UIView.animateWithDuration(detailVC.animationDuration, animations: {
+            self.pieChart.changeFrameSize(CGRectMake((Utils.screenWidth-(Utils.screenHeight-Utils.scaleFloat(400)))/2.0, 0, Utils.screenHeight-Utils.scaleFloat(400), Utils.screenHeight-Utils.scaleFloat(400)), animationDuration: CGFloat(self.detailVC.animationDuration))
+        })
+        //详情页面
+        let window = UIApplication.sharedApplication().keyWindow
+        detailVC.view.frame = window!.bounds
+        detailVC.view.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
+        detailVC.detailType = RecordType.EventType
+        detailVC.eventName = keys[index.integerValue]
+        detailVC.detailDataSource = showEventArray
+        detailVC.detailTableView.contentOffset = CGPointZero
+        detailVC.detailTableView.reloadData()
+        detailVC.closeDetailVC = { [weak self] () in
+            //回调方法，将pieChart复原
+            UIView.animateWithDuration(self!.detailVC.animationDuration, animations: {
+                self?.pieChart.changeFrameSize(self!.pieChart.view.bounds, animationDuration: CGFloat(self!.detailVC.animationDuration))
+            })
+        }
+        window!.addSubview(detailVC.view)
+    }
+    
+    //MARK:barchart代理方法
+    func showMonthAtIndex(index: NSNumber!) {
+        var tempArray = [TimeLineRecord]()
+        let timeString = String.init(format: "%@-%02d", year,index.integerValue+1)
+        for record in self.barDataSource {
+            if record.recordTime.containsString(timeString) {
+                tempArray.append(record)
+            }
+            record.isExpand = false
+        }
+        if tempArray.count > 0 {//数据长度大于1，才会显示详情列表
+            //barchart位置移动
+            UIView.animateWithDuration(yearDetailVC.animationDuration, animations: { 
+                self.barChart.changeFrameSize(CGRectMake((Utils.screenWidth-(Utils.screenHeight-Utils.scaleFloat(400)-25))/2.0, 0, Utils.screenHeight-Utils.scaleFloat(400)-25, Utils.screenHeight-Utils.scaleFloat(400)-25), animationDuration: CGFloat(self.detailVC.animationDuration))
+                self.barTitleLabel.frame = CGRectMake(0, Utils.screenHeight-Utils.scaleFloat(400)-20, Utils.screenWidth, 20)
+            })
+            //详情页面
+            let window = UIApplication.sharedApplication().keyWindow
+            yearDetailVC.view.frame = window!.bounds
+            yearDetailVC.view.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
+            yearDetailVC.detailType = RecordType.YearType
+            yearDetailVC.yearTime = timeString
+            yearDetailVC.detailDataSource = tempArray
+            yearDetailVC.detailTableView.contentOffset = CGPointZero
+            yearDetailVC.detailTableView.reloadData()
+            yearDetailVC.closeDetailVC = { [weak self] () in
+                //回调方法，将barchart复原
+                UIView.animateWithDuration(self!.detailVC.animationDuration, animations: {
+                    self?.barChart.changeFrameSize(self!.pieChart.view.bounds, animationDuration: CGFloat(self!.detailVC.animationDuration))
+                    self?.barTitleLabel.frame = CGRectMake(0, Utils.screenWidth + 5, Utils.screenWidth, 20)
+                })
+            }
+            window!.addSubview(yearDetailVC.view)
+        }
     }
     
     //MARK:配置柱状图数据
@@ -346,7 +425,6 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
             }else if scrollView.contentOffset.x == Utils.screenWidth{
                 self.dataType = .MoneyType      //统计类型
                 if self.barView.subviews.count == 0 {
-                    self.barChart.showFrame = CGRectMake(Utils.screenWidth, 0, Utils.screenWidth, Utils.screenWidth)
                     //第一次加载页面时，先获取网络数据
                     self.getBarNetData(NSDate())
                     self.barChart.loadBarChartView()
@@ -499,6 +577,8 @@ class DataStatisticViewController: UIViewController,UIScrollViewDelegate,UIColle
             let fmt = NSDateFormatter()
             fmt.dateFormat = "yyyy-MM-dd"
             let queryDate = String.init(format: "%@-01-01", self.yearOrMonthArray[indexPath.item])
+            //当前选中年份
+            year = self.yearOrMonthArray[indexPath.item]
             self.getBarNetData(fmt.dateFromString(queryDate)!)
         }
     }

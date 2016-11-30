@@ -29,6 +29,13 @@
     self.view.backgroundColor = BgColor;
 }
 
+#pragma mark - 改变位置
+- (void)changeFrameSize:(CGRect)size animationDuration:(CGFloat) time{
+    [UIView animateWithDuration:time animations:^{
+        self.pieChartView.frame = size;
+    }];
+}
+
 #pragma mark - 加载视图
 - (void)loadPieChartView{
     //创建饼状图
@@ -36,12 +43,9 @@
     self.pieChartView.backgroundColor = BgColor;
     [self.view addSubview:self.pieChartView];
     
-//    self.pieChartView.frame = self.showFrame;
-    [self.pieChartView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.showFrame.size.width, self.showFrame.size.height));
-        make.top.mas_equalTo(self.view).offset((100/414.0) * KScreenWidth);
-        make.left.mas_equalTo(self.view);
-    }];
+    
+    self.pieChartView.frame = self.view.bounds;
+    self.pieChartView.backgroundColor = [UIColor clearColor];
     
     self.pieChartView.delegate = self;
     
@@ -123,6 +127,7 @@
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     //每个区块的名称或描述
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
+    
     //饼状图总共有几块组成
     NSArray *keys = self.categoryDictionary.allKeys;
     for (int i = 0; i<keys.count; i++) {
@@ -144,7 +149,7 @@
     [colors addObject:[UIColor colorWithRed:51/255.f green:181/255.f blue:229/255.f alpha:1.f]];
     dataSet.colors = colors;//区块颜色
     dataSet.sliceSpace = 3;//相邻区块之间的间距
-    dataSet.selectionShift = 8;//选中区块时, 放大的半径
+    dataSet.selectionShift = (5/414.0)*KScreenWidth;//选中区块时, 放大的半径
     
     dataSet.xValuePosition = PieChartValuePositionOutsideSlice;//名称位置
     dataSet.yValuePosition = PieChartValuePositionInsideSlice;//数据位置
@@ -170,7 +175,9 @@
 
 #pragma mark - 饼状图代理方法
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry dataSetIndex:(NSInteger)dataSetIndex highlight:(ChartHighlight *)highlight{
-    NSLog(@"当前选中下标为 = %li",entry.xIndex);
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showEventAtIndex:)]) {
+        [self.delegate showEventAtIndex: [[NSNumber alloc] initWithLong:entry.xIndex]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

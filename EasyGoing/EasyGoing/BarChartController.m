@@ -27,6 +27,13 @@
     self.view.backgroundColor = BgColor;
 }
 
+#pragma mark - 改变位置
+- (void)changeFrameSize:(CGRect)size animationDuration:(CGFloat) time{
+    [UIView animateWithDuration:time animations:^{
+        self.barChartView.frame = size;
+    }];
+}
+
 #pragma mark - 加载柱状图
 - (void)loadBarChartView{
     //添加barChartView
@@ -34,25 +41,20 @@
     self.barChartView.delegate = self;//设置代理
     [self.view addSubview:self.barChartView];
     
-//    self.barChartView.frame = self.showFrame;
-    [self.barChartView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.showFrame.size.width, self.showFrame.size.height));
-        make.top.mas_equalTo(self.view).offset((100/414.0) * KScreenWidth);
-        make.left.mas_equalTo(self.view);
-    }];
+    self.barChartView.frame = self.view.bounds;
+    self.barChartView.backgroundColor = [UIColor clearColor];
     
     //基本样式
-    self.barChartView.backgroundColor = [UIColor colorWithRed:230/255.0f green:253/255.0f blue:253/255.0f alpha:1];
     self.barChartView.noDataText = @"暂无数据";//没有数据时的文字提示
     self.barChartView.drawValueAboveBarEnabled = YES;//数值显示在柱形的上面还是下面
     self.barChartView.drawHighlightArrowEnabled = NO;//点击柱形图是否显示箭头
     self.barChartView.drawBarShadowEnabled = NO;//是否绘制柱形的阴影背景
     
     //交互设置
-    self.barChartView.scaleYEnabled = true;//取消Y轴缩放
-    self.barChartView.doubleTapToZoomEnabled = true;//取消双击缩放
-    self.barChartView.dragEnabled = YES;//启用拖拽图表
-    self.barChartView.dragDecelerationEnabled = YES;//拖拽后是否有惯性效果
+    self.barChartView.scaleYEnabled = false;//取消Y轴缩放
+    self.barChartView.doubleTapToZoomEnabled = false;//取消双击缩放
+    self.barChartView.dragEnabled = false;//启用拖拽图表
+    self.barChartView.dragDecelerationEnabled = false;//拖拽后是否有惯性效果
     self.barChartView.dragDecelerationFrictionCoef = 0.9;//拖拽后惯性效果的摩擦系数(0~1)，数值越小，惯性越不明显
     
     //X轴样式
@@ -142,7 +144,7 @@
     BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:nil];
     set1.barSpace = 0.2;//柱形之间的间隙占整个柱形(柱形+间隙)的比例
     set1.drawValuesEnabled = YES;//是否在柱形图上面显示数值
-    set1.highlightEnabled = true;//点击选中柱形图是否有高亮效果，（双击空白处取消选中）
+    set1.highlightEnabled = false;//点击选中柱形图是否有高亮效果，（双击空白处取消选中）
     [set1 setColors:ChartColorTemplates.colorful];//设置柱形图颜色
     //将BarChartDataSet对象放入数组中
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
@@ -173,6 +175,13 @@
     if (self.animation) {
         //设置动画效果，可以设置X轴和Y轴的动画效果
         [self.barChartView animateWithYAxisDuration:1.0f];
+    }
+}
+
+- (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry dataSetIndex:(NSInteger)dataSetIndex highlight:(ChartHighlight *)highlight{
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(showMonthAtIndex:)]) {
+        [self.delegate showMonthAtIndex:[[NSNumber alloc] initWithLong:entry.xIndex]];
+
     }
 }
 

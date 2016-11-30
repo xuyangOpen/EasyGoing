@@ -43,12 +43,12 @@ class WaterFlowCell: UICollectionViewCell {
     let hmsLable = UILabel()
     var timer:NSTimer?
     
+    //背景图片
+    let backgroundImageView = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.backgroundColor = UIColor.whiteColor()
-        //设置一个圆角
-        self.layer.cornerRadius = 8
-        self.layer.masksToBounds = true
+        self.backgroundColor = UIColor.whiteColor()
         //设置定时器
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
         //将定时器添加到运行循环，保证滑动视图时，也能更新时间
@@ -68,43 +68,46 @@ class WaterFlowCell: UICollectionViewCell {
             if self.contentView.subviews.count == 0 {
                 var images = [UIImage]()
                 for i in 0..<3 {
-                    var image = UIImage.init(named: "show\(i+1).jpg")
+                    let image = UIImage.init(named: "photo\(i+1).jpg")
                     //对图片进行处理，减少图片内存
-                    image = image?.adjustImage(image!, newSize: (image?.scaleImage(image!, imageLength: model.itemWidth))!)
                     images.append(image!)
                 }
                 self.gradientMask.addGradientOnView(self.contentView, andImages: images)
-                self.setEffectViewBackground(.EffectTitle)
+//                self.setEffectViewBackground(.EffectTitle)
                 self.setItemTitle("我的相册")
             }
         case .Easing:
             if self.contentView.subviews.count == 0 {
-                self.setEffectViewBackground(.EffectBackground)
-                self.easing.addEasingOnView(self.contentView)
+                self.setBackGroundImageView("timeline.jpg")
+//                self.setEffectViewBackground(.EffectTitle)
+//                self.easing.addEasingOnView(self.contentView)
                 self.setItemTitle("小金库")
             }
         case .Clock:
             if self.contentView.subviews.count == 0 {
-                self.setEffectViewBackground(.EffectBackground)
                 //设置时间的label
+                self.setBackGroundImageView("clock.jpg")
                 self.setTimeLocation()
-                self.setItemTitle("北京时间")
+                self.setItemTitle("闹钟")
             }
         case .EmitterSnow:
             if self.contentView.subviews.count == 0 {
-                self.emitterSnow.addEmitterSnowOnView(self.contentView)
-                self.setItemTitle("我是标题")
+//                self.emitterSnow.addEmitterSnowOnView(self.contentView)
+                self.setBackGroundImageView("sport.jpg")
+                self.setItemTitle("运动")
             }
         case .MusicBar:
             if self.contentView.subviews.count == 0 {
-                self.musicBar.addMusicBarOnView(self.contentView)
-                self.setItemTitle("我是标题")
+//                self.musicBar.addMusicBarOnView(self.contentView)
+                self.setBackGroundImageView("map.jpg")
+                self.setItemTitle("目的地")
             }
         case .WaterWave:
             if self.contentView.subviews.count == 0 {
-                self.setEffectViewBackground(.EffectBackground)
-                self.waterwave.addWaterWaveOnView(self.contentView)
-                self.setItemTitle("我是标题")
+//                self.setEffectViewBackground(.EffectBackground)
+//                self.waterwave.addWaterWaveOnView(self.contentView)
+                self.setBackGroundImageView("random.jpg")
+                self.setItemTitle("随机")
             }
         default:
             break
@@ -115,6 +118,7 @@ class WaterFlowCell: UICollectionViewCell {
     func setItemTitle(title:String){
         self.itemTitle.text = title
         self.itemTitle.textColor = UIColor.whiteColor()
+        self.itemTitle.font = UIFont.boldSystemFontOfSize(15)
         self.itemTitle.textAlignment = .Center
         self.contentView.addSubview(self.itemTitle)
         self.itemTitle.snp_makeConstraints { (make) in
@@ -136,6 +140,19 @@ class WaterFlowCell: UICollectionViewCell {
         let fmt = NSDateFormatter()
         fmt.dateFormat = dateFormat
         return fmt.stringFromDate(NSDate())
+    }
+    
+    //MARK:设置背景图片
+    func setBackGroundImageView(imageName: String){
+        self.backgroundImageView.image = UIImage.init(named: imageName)
+        self.backgroundImageView.contentMode = .ScaleAspectFill
+        self.backgroundImageView.layer.masksToBounds = true
+        self.contentView.addSubview(self.backgroundImageView)
+        self.backgroundImageView.snp_makeConstraints(closure: { (make) in
+            make.top.equalToSuperview()
+            make.left.equalToSuperview()
+            make.size.equalToSuperview()
+        })
     }
     
     //MARK:设置当前时间label所在位置
